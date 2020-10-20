@@ -22,6 +22,7 @@ public class Main {
         System.out.println("Hello, " + name("Oleg") + "!");
         year(2020);
         year(2021);
+        backNumber(834);
     }
 
     public static float returnNumber (float a, float b, float c, float d){
@@ -38,6 +39,16 @@ public class Main {
 
     public static boolean trueOrFalse(int a) {
         return (a >= 0);
+    }
+
+    public static void backNumber (int a) {
+        if(a > 99 && a < 1000) {
+            int b = a / 100;
+            int c = (a - b*100)/10;
+            int d = a - b*100 - c*10;
+
+            System.out.println("Число " + a + " в обратном чтении: " + (d*100+c*10+b));
+        }
     }
 
     public static String name (String s) {
