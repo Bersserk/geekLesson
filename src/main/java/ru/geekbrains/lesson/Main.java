@@ -1,4 +1,4 @@
-package ru.geekbrains.lesson_1_1;
+package ru.geekbrains.lesson;
 
 public class Main {
     byte b = 1;
