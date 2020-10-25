@@ -30,7 +30,7 @@ public class Main {
         returnArray (new int[]{1, 1, 0, 0, 1, 0, 1, 1, 0, 0}); // Задача 1;
         arraySize8 (new int[8]);  // Задача 2;
         returnArray2 (new int[]{1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1}); // Задача 3;
-        squareArray (4);  // Задача 4;
+        squareArray (8);  // Задача 4;
         arrayMinMax (new int[]{7, 5, 3, 2, 11, 4, 5, 1, 4, 8, 9, 10});  // Задача 5;
         System.out.println (equalityInArray (new int[]{7, 5, 9, 2, 11, 4, 8}));  // Задача 6;
         offsetElemenets (new int[]{1, 2, 3, 4, 5}, 8);  // Задача 7 решена с учетом условия 8;
@@ -70,13 +70,16 @@ public class Main {
 
     private static void squareArray(int i) {
         int mas [][] = new int [i][i];
+        int t = i-1;
 
         for(int k = 0; k < i; k++){
             for (int z = 0; z < i; z++){
-                if(k == z)
+                if(k == z || t == z){
                     mas[k][z] = 1;
+                }
                 System.out.print(mas[k][z] + " ");
             }
+            t--;
             System.out.println();
         }
     }
