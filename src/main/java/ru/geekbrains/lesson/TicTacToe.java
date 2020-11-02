@@ -12,7 +12,7 @@ public class TicTacToe {
     static int sizeBoard = 0;  // размер поля
     static int [] arrX = new int[1];
     static int [] arrO = new int[1];
-    static int win, win10, win11;
+    static int win, win10, win11, win9;
     static int cellX, cellY;
     static String nameGamer1;
     static String nameGamer2;
@@ -166,31 +166,83 @@ public class TicTacToe {
         win = 1;
         win10 = 1;
         win11 = 1;
+        win9 = 1;
 
         for (int i = arr.length-1; i > 0; i--){
             win = 1;
-            win10 = 1;
-            win11 = 1;
 
             for (int k = i-1; k >= 0; k--){
 
-                if(arr[i] - arr[k] == 1){
+               if(arr[i] - arr[k] == 1){
                     win++;
-                    i--;
-                }else if (arr[i] - arr[k] == 10){
-                    win10++;
-                    i--;
-                }else if(arr[i] - arr[k] == 11){
-                    win11++;
                     i--;
                 }
             }
 
-            if(win == lenWin || win10 == lenWin || win11 == lenWin){
+            if(win == lenWin){
                 playerWin = true;
                 break;
             }
         }
+
+        if(playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win10 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 10 && arr[k] != 0) {
+                        win10++;
+                        i--;
+                    }
+                }
+
+                if (win10 == lenWin) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+        if(playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win11 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 11 && arr[k] != 0) {
+                        win11++;
+                        i--;
+                    }
+                }
+
+                if (win11 == lenWin) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+        if(playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win9 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 9 && arr[k] != 0) {
+                        win9++;
+                        i--;
+                    }
+                }
+
+                if (win9 == lenWin) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+
 
         return playerWin;
 
