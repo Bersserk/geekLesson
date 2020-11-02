@@ -98,9 +98,10 @@ public class TicTacToe {
         do {
 
             if(nameGamer == "Компьютер"){
-
-                cellX = (int) (Math.random() * (sizeBoard - 1) + 1);
-                cellY = (int) (Math.random() * (sizeBoard - 1) + 1);
+                cellX = (int) (Math.random() * (sizeBoard) + 1);
+                System.out.println("cellX - " + cellX);
+                cellY = (int) (Math.random() * (sizeBoard) + 1);
+                System.out.println("cellY - " + cellY);
             }else {
                 text(nameGamer + " введите номер выбранной строки от 1 до " + sizeBoard);
                 cellX = new Scanner(System.in).nextInt();
