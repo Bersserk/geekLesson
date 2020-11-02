@@ -12,7 +12,7 @@ public class TicTacToe {
     static int sizeBoard = 0;  // размер поля
     static int [] arrX = new int[1];
     static int [] arrO = new int[1];
-    static int win;
+    static int win, win10, win11;
     static int cellX, cellY;
     static String nameGamer1;
     static String nameGamer2;
@@ -99,9 +99,7 @@ public class TicTacToe {
 
             if(nameGamer == "Компьютер"){
                 cellX = (int) (Math.random() * (sizeBoard) + 1);
-                System.out.println("cellX - " + cellX);
                 cellY = (int) (Math.random() * (sizeBoard) + 1);
-                System.out.println("cellY - " + cellY);
             }else {
                 text(nameGamer + " введите номер выбранной строки от 1 до " + sizeBoard);
                 cellX = new Scanner(System.in).nextInt();
@@ -111,14 +109,21 @@ public class TicTacToe {
 
             if(cellX > 0 && cellY > 0 && cellX <= sizeBoard && cellY <= sizeBoard && (emptyCell(cellX-1, cellY-1))) {
                 board[cellX - 1][cellY - 1] = c;
+                if (nameGamer == "Компьютер"){
+                    text("Компьютер ход сделал!!!");
+                }
                 printGameBoard(board);
                 flag = false;
             } else if (!(cellX > 0 && cellY > 0 && cellX <= sizeBoard && cellY <= sizeBoard)){
-                printGameBoard(board);
-                text("Вы ввели некорректное значение! Еще раз...");
+                if(nameGamer != "Компьютер") {
+                    printGameBoard(board);
+                    text("Вы ввели некорректное значение! Еще раз...");
+                }
             } else {
-                printGameBoard(board);
-                text("Ячейка занята! Выберите другую...");
+                if(nameGamer != "Компьютер") {
+                    printGameBoard(board);
+                    text("Ячейка занята! Выберите другую...");
+                }
             }
 
         } while (flag);
@@ -159,19 +164,29 @@ public class TicTacToe {
 
         boolean playerWin = false;
         win = 1;
+        win10 = 1;
+        win11 = 1;
 
         for (int i = arr.length-1; i > 0; i--){
             win = 1;
+            win10 = 1;
+            win11 = 1;
 
             for (int k = i-1; k >= 0; k--){
 
                 if(arr[i] - arr[k] == 1){
                     win++;
                     i--;
+                }else if (arr[i] - arr[k] == 10){
+                    win10++;
+                    i--;
+                }else if(arr[i] - arr[k] == 11){
+                    win11++;
+                    i--;
                 }
             }
 
-            if(win == lenWin){
+            if(win == lenWin || win10 == lenWin || win11 == lenWin){
                 playerWin = true;
                 break;
             }
