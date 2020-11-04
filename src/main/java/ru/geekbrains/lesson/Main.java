@@ -18,16 +18,16 @@ public class Main {
     public static void main(String[] args) {
 
         Employee [] employees = new Employee[]{
-                        new Employee("Jack", "manager", "730 156 000", 20, 5000),
-                        new Employee("Jack1", "manager1", "730 156 111", 40, 5100),
-                        new Employee("Jack2", "manager2", "730 156 222", 34, 5200),
-                        new Employee("Jack3", "manager3", "730 156 333", 52, 5300),
-                        new Employee("Jack4", "manager4", "730 156 444", 46, 5400)
+                        new Employee("Овчинников Демьян Михаилович", "директор", "730 156 000", 42, 5000),
+                        new Employee("Носков Мечислав Даниилович", "секретарь", "730 156 111", 25, 5100),
+                        new Employee("Казаков Вадим Яковлевич", "бухгалтер", "730 156 222", 34, 5200),
+                        new Employee("Зиновьев Артем Игнатьевич", "менеджер", "730 156 333", 36, 5300),
+                        new Employee("Гусев Ипполит Глебович", "водитель", "730 156 444", 46, 5400)
         };
 
         for (int i = 0; i < employees.length; i++) {
-            System.out.println("ФИО: " + employees[i].getName() + "; должность: " + employees[i].getPosition());
-        }   // ФИО и должность всех имеющихся сотрудников
+            System.out.println(employees[i].getEmployeeID() + " ФИО: " + employees[i].getName() + "; должность: " + employees[i].getPosition());
+        }   // id + ФИО и должность всех имеющихся сотрудников
 
         for (int i = 0; i < employees.length; i++) {
 
@@ -56,7 +56,8 @@ public class Main {
 class Employee {
 
     private String name, position, phone;
-    private int age, salary;
+    private int age, salary, employeeID;
+    private static int id = 0;
 
     public Employee(String name, String position, String phone, int age, int salary) {
         this.name = name;
@@ -64,6 +65,7 @@ class Employee {
         this.phone = phone;
         this.age = age;
         this.salary = salary;
+        this.employeeID = ++id;
     }
 
     public int setSalary(Employee employee, int salary) {
@@ -77,6 +79,7 @@ class Employee {
 
     public void setName(String name) {
         this.name = name;
+
     }
 
     public String getPosition() {
@@ -109,5 +112,9 @@ class Employee {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public int getEmployeeID() {
+        return employeeID;
     }
 }
