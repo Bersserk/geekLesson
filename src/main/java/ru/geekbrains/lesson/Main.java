@@ -17,12 +17,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Employee [] employees = new Employee[]{
-                        new Employee("Овчинников Демьян Михаилович", "директор", "730 156 000", 42, 5000),
-                        new Employee("Носков Мечислав Даниилович", "секретарь", "730 156 111", 25, 5100),
-                        new Employee("Казаков Вадим Яковлевич", "бухгалтер", "730 156 222", 34, 5200),
-                        new Employee("Зиновьев Артем Игнатьевич", "менеджер", "730 156 333", 36, 5300),
-                        new Employee("Гусев Ипполит Глебович", "водитель", "730 156 444", 46, 5400)
+        Employee[] employees = new Employee[]{
+                new Employee("Овчинников Демьян Михаилович", "директор", "730 156 000", 42, 5000),
+                new Employee("Носков Мечислав Даниилович", "секретарь", "730 156 111", 25, 5100),
+                new Employee("Казаков Вадим Яковлевич", "бухгалтер", "730 156 222", 34, 5200),
+                new Employee("Зиновьев Артем Игнатьевич", "менеджер", "730 156 333", 36, 5300),
+                new Employee("Гусев Ипполит Глебович", "водитель", "730 156 444", 46, 5400)
         };
 
         for (int i = 0; i < employees.length; i++) {
@@ -30,9 +30,8 @@ public class Main {
         }   // id + ФИО и должность всех имеющихся сотрудников
 
         for (int i = 0; i < employees.length; i++) {
-
-            if (employees[i].getAge() > 40){
-                if(!flag){
+            if (employees[i].getAge() > 40) {
+                if (!flag) {
                     System.out.println();
                     System.out.println("Информация о сотрудниках старше 40 лет:");
                     flag = true;
@@ -40,13 +39,12 @@ public class Main {
 
                 System.out.println("ФИО: " + employees[i].getName() + "; должность: " + employees[i].getPosition() + "; телефон: " +
                         employees[i].getPhone() + "; возраст: " + employees[i].getAge() + "; зарплата: " + employees[i].getSalary() + ";");
-
             }
         }   // полная инфа о сотрудниках старше 40
 
         for (int i = 0; i < employees.length; i++) {
-            if(employees[i].getAge() > 45){
-                employees[i].setSalary(employees[i], 5000);
+            if (employees[i].getAge() > 45) {
+                employees[i].setNewSalary(5000);
                 System.out.println("Теперь сотрудник " + employees[i].getName() + " будет получать зп: " + employees[i].getSalary());
             }
         }  // повышение зп сотрудникам старше 45
@@ -55,8 +53,12 @@ public class Main {
 
 class Employee {
 
-    private String name, position, phone;
-    private int age, salary, employeeID;
+    private String name;
+    private String position;
+    private String phone;
+    private int age;
+    private int salary;
+    private final int employeeID;
     private static int id = 0;
 
     public Employee(String name, String position, String phone, int age, int salary) {
@@ -68,10 +70,6 @@ class Employee {
         this.employeeID = ++id;
     }
 
-    public int setSalary(Employee employee, int salary) {
-        this.salary += salary;
-        return salary;
-    }
 
     public String getName() {
         return name;
@@ -114,7 +112,14 @@ class Employee {
         this.salary = salary;
     }
 
+    public void setNewSalary(int salary) {
+        this.salary += salary;
+    }
+
     public int getEmployeeID() {
         return employeeID;
     }
 }
+
+
+
