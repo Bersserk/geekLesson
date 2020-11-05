@@ -6,3 +6,8 @@ public class Main {
 
     }
 }
+
+
+class Dog extends Animals {
+
+}
