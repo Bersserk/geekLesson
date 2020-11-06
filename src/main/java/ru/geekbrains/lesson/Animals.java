@@ -1,6 +1,6 @@
 package ru.geekbrains.lesson;
 
-public class Animals {
+class Animals {
 
     private String name;
 
@@ -8,14 +8,14 @@ public class Animals {
     private float maxJump;
     private float maxSwim;
 
-    public Animals(String name, float limitRun, float limitJump, float limitSwim) {
+    protected Animals(String name, float limitRun, float limitJump, float limitSwim) {
         this.name = name;
         this.maxRun = limitRun;
         this.maxJump = limitJump;
         this.maxSwim = limitSwim;
     }
 
-    public Animals(String name, float limitRun, float limitJump) {
+    protected Animals(String name, float limitRun, float limitJump) {
         this.name = name;
         this.maxRun = limitRun;
         this.maxJump = limitJump;
