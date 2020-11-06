@@ -3,69 +3,67 @@ package ru.geekbrains.lesson;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
-    static char [] txt1 = new char[50];
+    private static final String file1 = "src\\main\\java\\ru\\geekbrains\\lesson\\txt1";
+    private static final String file2 = "src\\main\\java\\ru\\geekbrains\\lesson\\txt2";
+    private static String fileResult = "src\\main\\java\\ru\\geekbrains\\lesson\\txtResult";
 
-    public static void main(String[] args) {
+    private static FileReader reader;
+    private static int c;
 
-        try(FileReader reader = new FileReader("src\\main\\java\\ru\\geekbrains\\lesson\\txt1"))
-        {
-            // читаем посимвольно
-            int c;
-            int i = 0;
-            while((c=reader.read())!=-1){
+    public static void main(String[] args) throws IOException {
 
+        joinFiles();
+        String userText = setTextFromUser();
+        char[] arrUserText = userText.toCharArray();
+        readAndCheckUserText(userText, arrUserText);
+    }
 
-                txt1[i] = (char)c;
-                //System.out.print((char)c);
-                i++;
+    private static void readAndCheckUserText(String userText, char[] arrUserText) throws IOException {
+        reader = new FileReader(fileResult);
+        int k = 0;
+        while ((c = reader.read()) != -1) {
+
+            if (k == userText.length() && c == 32) {
+                System.out.println("есть такое слово");
+                break;
+            }
+
+            if (k < arrUserText.length && c == arrUserText[k]) {
+                k++;
+            } else {
+                k = 0;
             }
         }
-        catch(IOException ex){
 
-            System.out.println(ex.getMessage());
+        if (c == -1) {
+            System.out.println("такого слова нет");
         }
+    }
 
-        for (char c: txt1) {
-            System.out.print(c);
-        }
+    private static void joinFiles() throws IOException {
+        FileWriter writer = new FileWriter(fileResult, false);
 
+        for (int i = 0; i < 2; i++) {
+            String file = (i == 0) ? file1 : file2;
 
-        try(FileReader reader = new FileReader("src\\main\\java\\ru\\geekbrains\\lesson\\txt2"))
-        {
-            // читаем посимвольно
-            int c;
-            System.out.println();
-            while((c=reader.read())!=-1){
-
-                System.out.print((char)c);
+            reader = new FileReader(file);
+            while ((c = reader.read()) != -1) {
+                writer.append((char) c);
             }
-        }
-        catch(IOException ex){
 
-            System.out.println(ex.getMessage());
+            writer.append("\n");
         }
 
-        /*
-        try(FileWriter writer = new FileWriter("src\\main\\java\\ru\\geekbrains\\lesson\\txt3", true))
-        {
-            // запись всей строки
-            String text = "Hello Gold!";
-            writer.write(text);
-            // запись по символам
-            writer.append('\n');
-            writer.append("src\main\java\ru\geekbrains\lesson\txt3");
+        writer.close();
+    }
 
-            writer.flush();
-        }
-        catch(IOException ex){
-
-            System.out.println(ex.getMessage());
-        }
-
-         */
-
+    private static String setTextFromUser() {
+        System.out.print("Введите искомое слово: ");
+        String textUser = new Scanner(System.in).nextLine();
+        return textUser;
     }
 }
