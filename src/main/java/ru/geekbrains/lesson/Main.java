@@ -1,107 +1,158 @@
 package ru.geekbrains.lesson;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
-    private static final String file1 = "src\\main\\java\\ru\\geekbrains\\lesson\\myFiles\\txt1";
-    private static final String file2 = "src\\main\\java\\ru\\geekbrains\\lesson\\myFiles\\txt2";
-    private static String fileResult = "src\\main\\java\\ru\\geekbrains\\lesson\\txtResult";
-    private static String myFolder = "src\\main\\java\\ru\\geekbrains\\lesson\\myFiles";
-
-    private static File tmp = new File(myFolder);
-    private static File [] arrayListFiles = tmp.listFiles();
-    private static FileReader reader;
-    private static int c;
+    private static final String rootPath = "src\\main\\java\\ru\\geekbrains\\lesson\\";
+    private static String myFolder = rootPath + "myFiles";
+    private static int countFilesInFolder;
 
     public static void main(String[] args) throws IOException {
 
+        countFilesInFolder = getCountFilesInFolder();
 
-        joinFiles();
-        String userText = setTextFromUser();
-        readAndCheckUserText(userText, fileResult);
+        while (true) {
+            notice("Выберите действие:\nОбъединить файлы - 1\nНайти слово - 2\nВыход - 3");
+            int i = new Scanner(System.in).nextInt();
+            if (i == 1) {
+                notice("Список файлов:");
+                printListFilesInFolder(isListFilesInFolder(myFolder));
+                notice("Сколько файлов хотите склеить?");
+                int numberFilesToCombine = new Scanner(System.in).nextInt();
+                notice("Сколько файлов хотите склеить?");
+                int[] numbersFilesForCombine = new int[numberFilesToCombine];
+                notice("Файлы будут объедены в порядке вашего выбора!!!");
+                for (int j = 0; j < numberFilesToCombine; j++) {
+                    notice("Введите порядковый номер файла");
+                    numbersFilesForCombine[j] = new Scanner(System.in).nextInt();
+                }
+                joinFiles(numbersFilesForCombine);
+                System.out.println("Файл с результатом находится в одном каталоге с Main.java, под именем txtResult");
+                break;
 
-        System.out.print("Проверим в каких фалах есть такая цифра? (впишите '1' если да...): ");
-        if(new Scanner(System.in).nextInt() == 1)
-            searchWordInFiles(userText);
-    }
+            } else if (i == 2) {
 
-    private static void readAndCheckUserText(String userText, String currentFile) throws IOException {
-        char[] arrUserText = userText.toCharArray();
-        reader = new FileReader(currentFile);
-        int k = 0;
-        while ((c = reader.read()) != -1) {
+                notice("В качестве проверки поиска во всех файлах, будем искать в виде небольшой игры");
+                String userText = setTextFromUser(); // запрашиваем у пользователя слово
 
-            if (k == userText.length() && c == 32) {
-                System.out.println("В файле " + currentFile + " - есть такая цифра");
+                for (int j = 0; j < countFilesInFolder; j++) {
+                    boolean b = searchWordInFiles(userText, getTextFromFiles(isListFilesInFolder(myFolder)[j]));
+                    if (b)
+                        notice("В файле " + isListFilesInFolder(myFolder)[j].substring(rootPath.length()) +
+                                " есть такое слово");
+                    else
+                        notice("В файле " + isListFilesInFolder(myFolder)[j].substring(rootPath.length()) +
+                                " такого слова нет");
+                }
+                break;
+            } else if (i == 3) {
+                notice("До свидания!!!");
                 break;
             }
-
-            if (k < arrUserText.length && c == arrUserText[k]) {
-                k++;
-            } else {
-                k = 0;
-            }
-        }
-
-        if (c == -1) {
-            System.out.println("В файле " + currentFile + " - нет такой цифры");
         }
     }
 
-    private static void joinFiles() throws IOException {
-        FileWriter writer = new FileWriter(fileResult, false);
+    private static void joinFiles(int[] setListNumberFilesForCombine) throws IOException {
+        FileWriter writer = new FileWriter(rootPath + "\\txtResult", false);
 
-        for (int i = 0; i < getCountFilesInFolder(); i++) {
+        for (int j = 0; j < setListNumberFilesForCombine.length; j++) {
 
-
-            String file = arrayListFiles[i].getName();
-
-            reader = new FileReader(myFolder + "\\" + file);
+            String file = isListFilesInFolder(myFolder)[setListNumberFilesForCombine[j] - 1];
+            FileReader reader = new FileReader(file);
+            int c;
             while ((c = reader.read()) != -1) {
                 writer.append((char) c);
             }
-
             writer.append("\n");
         }
-
         writer.close();
     }
 
-    private static String setTextFromUser() {
-        System.out.print("Угадаешь цифру, которая встречается во всех четырех файлах? Введите цифру ТЕКСТОМ от 0 до 9: ");
-        String textUser = new Scanner(System.in).nextLine();
-        return textUser;
-    }
-
-    private static void searchWordInFiles (String userText){
-
-        if (tmp.isDirectory()){
-            for (File item: tmp.listFiles()){
-                try {
-                    readAndCheckUserText(userText, item.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private static int getCountFilesInFolder (){
+    private static int getCountFilesInFolder() {
         File tmp = new File(myFolder);
         int countFiles = 0;
 
-        if (tmp.isDirectory()){
-            for (File item: tmp.listFiles()){
-                    countFiles++;
+        if (tmp.isDirectory()) {
+            for (File item : tmp.listFiles()) {
+                countFiles++;
             }
         }
 
         return countFiles;
+    }
+
+    private static String getTextFromFiles(String setPathFiles) throws FileNotFoundException {
+
+        String inputText = null;
+        String outputText = null;
+
+        BufferedReader br = new BufferedReader(new FileReader(setPathFiles));
+
+        while (true) {
+            try {
+                if (((inputText = br.readLine()) == null)) break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (outputText == null)
+                outputText = inputText;
+            else
+                outputText += " " + inputText;
+        }
+
+        return outputText;
+    }
+
+    private static String[] isListFilesInFolder(String folder) {
+        File tmp = new File(folder);
+        String[] isListFiles = new String[tmp.listFiles().length];
+
+        if (tmp.isDirectory()) {
+            if (folder.isEmpty())
+                notice("В данном каталоге нет файлов");
+
+            int i = 0;
+            for (File item : tmp.listFiles()) {
+                isListFiles[i] = String.valueOf(item);
+                i++;
+            }
+        }
+
+        return isListFiles;
+    }
+
+    private static void printListFilesInFolder(String[] setListFilesInFolder) {
+        int i = 1;
+        for (String item : setListFilesInFolder) {
+            notice(i + ".  " + item);
+            i++;
+        }
+    }
+
+    private static boolean searchWordInFiles(String userText, String currentText) {
+        int k = 0;
+        boolean foundText = false;
+        while (k < currentText.length()) {
+            foundText = currentText.regionMatches(true, k, userText, 0, userText.length());
+            if (foundText)
+                break;
+            else
+                k++;
+        }
+        return foundText;
+    }
+
+    private static void notice(String setTextForMessage) {
+        System.out.println(setTextForMessage);
+    }
+
+    private static String setTextFromUser() {
+        System.out.print("Угадаешь цифру, которая встречается во всех четырех файлах? Введите цифру ТЕКСТОМ от 0 до 9: ");
+        String textUser = new Scanner(System.in).nextLine().toLowerCase();
+        return textUser;
     }
 
 
