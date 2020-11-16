@@ -50,7 +50,9 @@ public class Setting extends JFrame {
         btnPlay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 btnPlayGameClick();
+
             }
         });
 
