@@ -32,8 +32,10 @@ public class GameMap extends JPanel {
     private int fieldSizeX;  // размер клеток поля по Х
     private int fieldSizeY;   // размер клеток поля по Y
     private int winLength;   // длина выиграшной линии
-    private int[][] arr;   // размер игрового поля
-    private int[][] field;
+    //private int[][] arr;   // размер игрового поля
+    //private int[][] field;
+
+    static int win, win10, win11, win9;
 
 
     private int cellWidth;
@@ -44,17 +46,18 @@ public class GameMap extends JPanel {
 
     static int[] arrX;  // массив ходов первого игрока
     static int[] arrO;  // массив ходов второго игрока
+    private boolean flag = true;
 
     GameMap() {
         System.out.println("конструктор GameMap");
         setBackground(Color.WHITE);
         gameLogics = new GameLogics();
-        GameLogics.board = new int[3][3];
-        GameLogics.boardXO = new ShapeXO[3][3];
+        GameLogics.board = new int[10][10];
+        GameLogics.boardXO = new ShapeXO[10][10];
 
 
-        arrX = new int[sum(9)];
-        arrO = new int[sum(9)];
+        arrX = new int[sum(100)];
+        arrO = new int[sum(100)];
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -65,40 +68,20 @@ public class GameMap extends JPanel {
             }
         });
 
+        System.out.println("game");
+
 
     }
 
     private void update(MouseEvent e) {
         System.out.println("метод update");
-        int cellX;
-        int cellY;
 
-        if (DOT_H) {
-            cellX = e.getX() / cellWidth;
-            cellY = e.getY() / cellHeight;
-        } else {
-//            cellX = 1;  // сюда вписать рандом от Пк
-//            cellY = 1;  // сюда вписать рандом от ПК
+        turnPlayers(turn(DOT_H, e), arrX);
+        turnPlayers(turn(DOT_H, e), arrO);
 
-            cellX = e.getX() / cellWidth;
-            cellY = e.getY() / cellHeight;
-        }
 
-//        System.out.println(cellX);
-//        System.out.println(cellY);
-
-        int value = (cellX + 1) * 10 + (cellY + 1);
-
-        if (GameLogics.board[cellY][cellX] == 0) {
-            GameLogics.board[cellY][cellX] = value;
-            if (DOT_H) {
-                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX, cellY, cellWidth, cellHeight, RED);
-                DOT_H = false;
-            } else {
-                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX, cellY, cellWidth, cellHeight, BLUE);
-                DOT_H = true;
-            }
-        }
+//        turn (DOT_H, e);
+//        turn (DOT_H, e);
 
         for (int i = 0; i < gameLogics.board.length; i++) {
             for (int j = 0; j < gameLogics.board[i].length; j++) {
@@ -109,9 +92,181 @@ public class GameMap extends JPanel {
 
 
         repaint();
+    }
 
+    public boolean turnPlayers(int turn, int[] arr) {
+
+        for (int i = arr.length - 1; i >= 0; i--) {  // заполняет ближайшую не занятую ячейку массива
+            if (arr[i] == 0) {
+                arr[i] = turn;
+                break;
+            }
+        }
+
+        return isWin(sortArr(arr));
+    }
+
+    private int turn(boolean dotH, MouseEvent e) {
+        System.out.println("метод turnX");
+        int cellX;
+        int cellY;
+        int value;
+        DOT_H = dotH;
+
+
+        do {
+            //flag = true;
+
+            if (DOT_H) {
+                cellX = e.getX() / cellWidth + 1;
+                cellY = e.getY() / cellHeight + 1;
+
+                System.out.println("Чел: \ncellX = " + cellX);
+                System.out.println("cellY = " + cellY);
+            } else {
+                cellX = (int) (Math.random() * (fieldSizeX)) + 1;
+                cellY = (int) (Math.random() * (fieldSizeY)) + 1;
+
+                System.out.println("Комп: \ncellX = " + cellX);
+                System.out.println("cellY = " + cellY);
+            }
+
+            value = cellX * 10 + cellY;
+
+
+            if (emptyCell(cellX, cellY)) {
+
+                GameLogics.board[cellY - 1][cellX - 1] = value;
+                if (DOT_H) {
+                    GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, RED);
+                    DOT_H = false;
+                    break;
+                } else {
+                    GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, BLUE);
+                    DOT_H = true;
+                    break;
+                }
+
+
+            } else {
+                if (DOT_H) {
+                    //printGameBoard(board);
+                    System.out.println("Ячейка занята! Выберите другую...");
+                }
+                //flag = false;
+            }
+
+        } while (true);
+
+        return value;
+    }
+
+    public int[] sortArr(int[] _arrTurn) {
+        int j;
+
+        for (int i = _arrTurn.length - 1; i > 0; i--) {
+            for (j = 0; j < i; j++) {
+                if (_arrTurn[j] > _arrTurn[j + 1]) {
+                    int tmp = _arrTurn[j];
+                    _arrTurn[j] = _arrTurn[j + 1];
+                    _arrTurn[j + 1] = tmp;
+                }
+            }
+        }
+        return _arrTurn;
+    }
+
+    public boolean isWin(int[] arr) {
+
+        boolean playerWin = false;
+        win = 1;
+        win10 = 1;
+        win11 = 1;
+        win9 = 1;
+
+        for (int i = arr.length - 1; i > 0; i--) {
+            win = 1;
+
+            for (int k = i - 1; k >= 0; k--) {
+
+                if (arr[i] - arr[k] == 1) {
+                    win++;
+                    i--;
+                }
+            }
+
+            if (win == winLength) {
+                playerWin = true;
+                break;
+            }
+        }
+
+        if (playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win10 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 10 && arr[k] != 0) {
+                        win10++;
+                        i--;
+                    }
+                }
+
+                if (win10 == winLength) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+        if (playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win11 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 11 && arr[k] != 0) {
+                        win11++;
+                        i--;
+                    }
+                }
+
+                if (win11 == winLength) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+        if (playerWin == false) {
+            for (int i = arr.length - 1; i > 0; i--) {
+                win9 = 1;
+
+                for (int k = i - 1; k >= 0; k--) {
+
+                    if (arr[i] - arr[k] == 9 && arr[k] != 0) {
+                        win9++;
+                        i--;
+                    }
+                }
+
+                if (win9 == winLength) {
+                    playerWin = true;
+                    break;
+                }
+            }
+        }
+
+
+        return playerWin;
 
     }
+
+    public boolean emptyCell(int cellX, int cellY) {
+        return GameLogics.board[cellY - 1][cellX - 1] == 0;
+    }
+
 
     void startNewGame(int mode, int fieldSizeX, int fieldSizeY, int winLength) {
         System.out.println("метод startNewGame");
@@ -119,7 +274,7 @@ public class GameMap extends JPanel {
         this.fieldSizeX = fieldSizeX;
         this.fieldSizeY = fieldSizeY;
         this.winLength = winLength;
-        field = new int[fieldSizeY][fieldSizeX];
+        //field = new int[fieldSizeY][fieldSizeX];
 
         repaint();
 
@@ -162,62 +317,18 @@ public class GameMap extends JPanel {
 
         for (int i = 0; i < GameLogics.boardXO.length; i++) {
             for (int j = 0; j < GameLogics.boardXO.length; j++) {
-                //System.out.println("объект" + shapeXO);
                 if (GameLogics.boardXO[i][j] != null)
                     GameLogics.boardXO[i][j].paint(g);
-                //new ShapeXO(1,1,cellWidth,cellHeight).paint(g);
             }
         }
-
-//                int y;
-//                int x;
-//
-//
-//                if (DOT_H) {
-//
-//                    for (int i = 0; i < arrX.length; i++) {
-//                        if(arrX[i] != 0){
-//                            x = arrX[i]/10 - 1;
-//                            y = arrX[i]%10 - 1;
-//                            g.setColor(new Color(1, 1, 255));
-//                            g.fillOval(x * cellWidth + DOT_PADDING,
-//                                    y * cellHeight + DOT_PADDING,
-//                                    cellWidth - DOT_PADDING * 2,
-//                                    cellHeight - DOT_PADDING * 2);
-//                            DOT_H = false;
-//                        }
-//                    }
-//                } else if (DOT_H == false) {
-//                    for (int i = 0; i < arrO.length; i++) {
-//                        if(arrO[i] != 0){
-//                            x = arrO[i]/10-1;
-//                            y = arrO[i]%10-1;
-//                            g.setColor(Color.RED);
-//                            g.fillOval(x * cellWidth + DOT_PADDING,
-//                                    y * cellHeight + DOT_PADDING,
-//                                    cellWidth - DOT_PADDING * 2,
-//                                    cellHeight - DOT_PADDING * 2);
-//                            DOT_H = true;
-//                        }
-//                    }
-//                } else {
-//                   // throw new RuntimeException(String.format("Can't repaint cell field[%d][%d]: %d", y, x, field[y][x]));
-//                }
-
-
-    }
-
-    public boolean isEmptyCell(int x, int y) {
-        //System.out.println("метод isEmptyCell");
-        return field[y][x] == DOT_EMPTY;
     }
 
     private static int sum(int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
         int t = 0;
         if (sizeBoard % 2 != 0) {
-            t = (sizeBoard * sizeBoard + 1) / 2;
+            t = (3 * 3 + 1) / 2;
         } else {
-            t = sizeBoard * sizeBoard / 2;
+            t = 3 * 3 / 2;
         }
         return t;
     }

@@ -13,6 +13,10 @@ class ShapeXO extends JComponent {
 
 
 
+    private int position;
+
+
+
     public ShapeXO(int x, int y, int cellWidth, int cellHeight, Color color) {
         //draw();
         this.color = color;
@@ -20,6 +24,7 @@ class ShapeXO extends JComponent {
         this.y = y;
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
+        position = (x+1)*10+(y+1);
     }
 
 //    void draw(){
@@ -39,5 +44,9 @@ class ShapeXO extends JComponent {
                 y * cellHeight + DOT_PADDING,
                 cellWidth - DOT_PADDING * 2,
                 cellHeight - DOT_PADDING * 2);
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
