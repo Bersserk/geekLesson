@@ -1,7 +1,11 @@
 package ru.geekbrains.lesson;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.RED;
 
 public class GameMap extends JPanel {
     public static final int MODE_HVA = 0;
@@ -28,7 +32,7 @@ public class GameMap extends JPanel {
     private int fieldSizeX;  // размер клеток поля по Х
     private int fieldSizeY;   // размер клеток поля по Y
     private int winLength;   // длина выиграшной линии
-    private int[][]arr;   // размер игрового поля
+    private int[][] arr;   // размер игрового поля
     private int[][] field;
 
 
@@ -38,8 +42,8 @@ public class GameMap extends JPanel {
 
     ShapeXO shapeXO;
 
-    static int [] arrX;  // массив ходов первого игрока
-    static int [] arrO;  // массив ходов второго игрока
+    static int[] arrX;  // массив ходов первого игрока
+    static int[] arrO;  // массив ходов второго игрока
 
     GameMap() {
         System.out.println("конструктор GameMap");
@@ -47,7 +51,6 @@ public class GameMap extends JPanel {
         gameLogics = new GameLogics();
         GameLogics.board = new int[3][3];
         GameLogics.boardXO = new ShapeXO[3][3];
-
 
 
         arrX = new int[sum(9)];
@@ -63,7 +66,6 @@ public class GameMap extends JPanel {
         });
 
 
-
     }
 
     private void update(MouseEvent e) {
@@ -71,7 +73,7 @@ public class GameMap extends JPanel {
         int cellX;
         int cellY;
 
-        if(DOT_H) {
+        if (DOT_H) {
             cellX = e.getX() / cellWidth;
             cellY = e.getY() / cellHeight;
         } else {
@@ -85,23 +87,16 @@ public class GameMap extends JPanel {
 //        System.out.println(cellX);
 //        System.out.println(cellY);
 
-        int value = (cellX+1) * 10 + (cellY+1);
+        int value = (cellX + 1) * 10 + (cellY + 1);
 
         if (GameLogics.board[cellY][cellX] == 0) {
             GameLogics.board[cellY][cellX] = value;
-            if(DOT_H) {
-                //arrX[0] = value;
-
-
-                //shapeXO = new ShapeXO(cellX,cellY,cellWidth,cellHeight);
-                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX,cellY,cellWidth,cellHeight);
-
-
-                System.out.println("объект в текущей ячейке" + GameLogics.boardXO[cellY][cellX]);
-
+            if (DOT_H) {
+                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX, cellY, cellWidth, cellHeight, RED);
+                DOT_H = false;
             } else {
-                arrO[0] = value;
-
+                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX, cellY, cellWidth, cellHeight, BLUE);
+                DOT_H = true;
             }
         }
 
@@ -114,8 +109,6 @@ public class GameMap extends JPanel {
 
 
         repaint();
-
-
 
 
     }
@@ -152,7 +145,7 @@ public class GameMap extends JPanel {
         int width = getWidth();   // получаем значение ширины нашей панели
         int height = getHeight();   // получаем значение высоты нашей панели
 
-        if(fieldSizeX!=0 && fieldSizeY!=0) {
+        if (fieldSizeX != 0 && fieldSizeY != 0) {
             cellWidth = width / fieldSizeX;
             cellHeight = height / fieldSizeY;
         }
@@ -170,7 +163,7 @@ public class GameMap extends JPanel {
         for (int i = 0; i < GameLogics.boardXO.length; i++) {
             for (int j = 0; j < GameLogics.boardXO.length; j++) {
                 //System.out.println("объект" + shapeXO);
-               if(GameLogics.boardXO[i][j] != null)
+                if (GameLogics.boardXO[i][j] != null)
                     GameLogics.boardXO[i][j].paint(g);
                 //new ShapeXO(1,1,cellWidth,cellHeight).paint(g);
             }
@@ -219,12 +212,12 @@ public class GameMap extends JPanel {
         return field[y][x] == DOT_EMPTY;
     }
 
-    private static int sum (int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
+    private static int sum(int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
         int t = 0;
-        if (sizeBoard%2 != 0){
-            t = (sizeBoard*sizeBoard+1)/2;
+        if (sizeBoard % 2 != 0) {
+            t = (sizeBoard * sizeBoard + 1) / 2;
         } else {
-            t = sizeBoard*sizeBoard/2;
+            t = sizeBoard * sizeBoard / 2;
         }
         return t;
     }

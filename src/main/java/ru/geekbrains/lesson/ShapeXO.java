@@ -9,12 +9,13 @@ class ShapeXO extends JComponent {
     int y;
     int cellWidth;
     int cellHeight;
+    Color color;
 
 
 
-    public ShapeXO(int x, int y, int cellWidth, int cellHeight) {
+    public ShapeXO(int x, int y, int cellWidth, int cellHeight, Color color) {
         //draw();
-
+        this.color = color;
         this.x = x;
         this.y = y;
         this.cellWidth = cellWidth;
@@ -33,7 +34,7 @@ class ShapeXO extends JComponent {
     public void paint(Graphics g) {
         super.paint(g);
 
-        g.setColor(Color.BLACK);
+        g.setColor(color);
         g.fillOval(x * cellWidth + DOT_PADDING,
                 y * cellHeight + DOT_PADDING,
                 cellWidth - DOT_PADDING * 2,
