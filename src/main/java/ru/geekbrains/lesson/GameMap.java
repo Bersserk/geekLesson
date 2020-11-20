@@ -1,5 +1,7 @@
 package ru.geekbrains.lesson;
 
+import org.w3c.dom.ls.LSOutput;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,6 +48,10 @@ public class GameMap extends JPanel {
 
     static int[] arrX;  // массив ходов первого игрока
     static int[] arrO;  // массив ходов второго игрока
+    private int startPointX;
+    private int finishPointX;
+    private int startPointY;
+    private int finishPointY;
 
 
     GameMap() {
@@ -58,8 +64,8 @@ public class GameMap extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                if(!stopGame)
-                update(e);
+                if (!stopGame)
+                    update(e);
             }
         });
 
@@ -70,30 +76,29 @@ public class GameMap extends JPanel {
 
     private void update(MouseEvent e) {
         System.out.println("метод update");
-       // if(!stopGame) {
-            if (turnPlayers(turn(DOT_H, e), arrX)) {
-                System.out.println("Чел выиграл!");
-                repaint();
-                stopGame = true;
-                return;
-            } else if (isNobodyWon()) {
-                System.out.println("Ничья");
-                repaint();
-                stopGame = true;
-                return;
-            } else if (turnPlayers(turn(DOT_H, e), arrO)) {
-                System.out.println("Чел выиграл!");
-                repaint();
-                stopGame = true;
-                return;
-            } else if (isNobodyWon()) {
-                System.out.println("Ничья");
-                repaint();
-                stopGame = true;
-                return;
-            }
-      //  }
-
+        // if(!stopGame) {
+        if (turnPlayers(turn(DOT_H, e), arrX)) {
+            System.out.println("Чел выиграл!");
+            repaint();
+            stopGame = true;
+            return;
+        } else if (isNobodyWon()) {
+            System.out.println("Ничья");
+            repaint();
+            stopGame = true;
+            return;
+        } else if (turnPlayers(turn(DOT_H, e), arrO)) {
+            System.out.println("Чел выиграл!");
+            repaint();
+            stopGame = true;
+            return;
+        } else if (isNobodyWon()) {
+            System.out.println("Ничья");
+            repaint();
+            stopGame = true;
+            return;
+        }
+        //  }
 
 
         for (int i = 0; i < gameLogics.board.length; i++) {
@@ -106,13 +111,13 @@ public class GameMap extends JPanel {
         repaint();
     }
 
-    private static boolean isNobodyWon (){
+    private static boolean isNobodyWon() {
 
         boolean nobodyWon = true;
 
-        for (int [] k :GameLogics.board){
-            for(int i: k){
-                if(i == 0)
+        for (int[] k : GameLogics.board) {
+            for (int i : k) {
+                if (i == 0)
                     nobodyWon = false;
             }
         }
@@ -163,10 +168,10 @@ public class GameMap extends JPanel {
 
                 GameLogics.board[cellY - 1][cellX - 1] = value;
                 if (DOT_H) {
-                    GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, RED);
+                    GameLogics.boardXO[cellX - 1][cellY - 1] = new ShapeXO(cellX - 1, cellY - 1, cellWidth, cellHeight, RED);
                     DOT_H = false;
                 } else {
-                    GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, BLUE);
+                    GameLogics.boardXO[cellX - 1][cellY - 1] = new ShapeXO(cellX - 1, cellY - 1, cellWidth, cellHeight, BLUE);
                     DOT_H = true;
                 }
                 break;
@@ -203,14 +208,20 @@ public class GameMap extends JPanel {
         int win10 = 1;
         int win11 = 1;
         int win9 = 1;
-
+        int[] winArr = new int[winLength];
+        System.out.println("длина временного массива" + winArr.length);
 
         for (int i = arr.length - 1; i > 0; i--) {
             win = 1;
+            winArr[0] = arr[i];
+            System.out.println("значение в нулевой ячейке = " + winArr[0]);
 
             for (int k = i - 1; k >= 0; k--) {
 
                 if (arr[i] - arr[k] == 1) {
+                    winArr[win] = arr[k];
+                    System.out.println("индекс ячейки = " + win + ", значение = " + winArr[win]);
+
                     win++;
                     i--;
                 }
@@ -218,6 +229,11 @@ public class GameMap extends JPanel {
 
             if (win == winLength) {
                 playerWin = true;
+                this.startPointX = winArr[0] / 10;
+                this.finishPointX = winArr[winLength - 1] / 10;
+                this.startPointY = winArr[0] % 10;
+                this.finishPointY = winArr[winLength - 1] % 10;
+
                 break;
             }
         }
@@ -348,6 +364,27 @@ public class GameMap extends JPanel {
                 if (GameLogics.boardXO[i][j] != null)
                     GameLogics.boardXO[i][j].paint(g);
             }
+        }
+
+        if (stopGame) {
+
+            g.setColor(Color.BLACK);
+            g.drawLine((int) ((startPointX-1) * cellWidth + cellWidth*0.5),
+                    (int)((startPointY-1) * cellHeight + cellHeight*0.5 + cellWidth * 0.25),
+                    (int)((finishPointX-1) * cellWidth + cellWidth*0.5),
+                    (int)((finishPointY-1) * cellHeight + cellHeight*0.5 - cellWidth * 0.25));
+
+            System.out.println("_x1 = " + startPointX);
+            System.out.println("_y1 = " + startPointY);
+            System.out.println("_x2 = " + finishPointX);
+            System.out.println("_y2 = " + finishPointY);
+
+            System.out.println("x1 = " + startPointX * cellWidth);
+            System.out.println("y1 = " + startPointY * cellHeight);
+            System.out.println("x2 = " + finishPointX * cellWidth);
+            System.out.println("y2 = " + finishPointY * cellHeight);
+
+            System.out.println("нарисована победная линия");
         }
     }
 
