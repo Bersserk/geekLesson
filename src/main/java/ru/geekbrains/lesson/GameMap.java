@@ -32,10 +32,10 @@ public class GameMap extends JPanel {
     private int fieldSizeX;  // размер клеток поля по Х
     private int fieldSizeY;   // размер клеток поля по Y
     private int winLength;   // длина выиграшной линии
-    //private int[][] arr;   // размер игрового поля
-    //private int[][] field;
 
-    static int win, win10, win11, win9;
+    private boolean stopGame = false;
+
+    //int win, win10, win11, win9;
 
 
     private int cellWidth;
@@ -46,24 +46,19 @@ public class GameMap extends JPanel {
 
     static int[] arrX;  // массив ходов первого игрока
     static int[] arrO;  // массив ходов второго игрока
-    private boolean flag = true;
+
 
     GameMap() {
         System.out.println("конструктор GameMap");
         setBackground(Color.WHITE);
         gameLogics = new GameLogics();
-        GameLogics.board = new int[10][10];
-        GameLogics.boardXO = new ShapeXO[10][10];
 
-
-        arrX = new int[sum(100)];
-        arrO = new int[sum(100)];
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-
+                if(!stopGame)
                 update(e);
             }
         });
@@ -75,13 +70,31 @@ public class GameMap extends JPanel {
 
     private void update(MouseEvent e) {
         System.out.println("метод update");
+       // if(!stopGame) {
+            if (turnPlayers(turn(DOT_H, e), arrX)) {
+                System.out.println("Чел выиграл!");
+                repaint();
+                stopGame = true;
+                return;
+            } else if (isNobodyWon()) {
+                System.out.println("Ничья");
+                repaint();
+                stopGame = true;
+                return;
+            } else if (turnPlayers(turn(DOT_H, e), arrO)) {
+                System.out.println("Чел выиграл!");
+                repaint();
+                stopGame = true;
+                return;
+            } else if (isNobodyWon()) {
+                System.out.println("Ничья");
+                repaint();
+                stopGame = true;
+                return;
+            }
+      //  }
 
-        turnPlayers(turn(DOT_H, e), arrX);
-        turnPlayers(turn(DOT_H, e), arrO);
 
-
-//        turn (DOT_H, e);
-//        turn (DOT_H, e);
 
         for (int i = 0; i < gameLogics.board.length; i++) {
             for (int j = 0; j < gameLogics.board[i].length; j++) {
@@ -90,8 +103,21 @@ public class GameMap extends JPanel {
             System.out.println();
         }
 
-
         repaint();
+    }
+
+    private static boolean isNobodyWon (){
+
+        boolean nobodyWon = true;
+
+        for (int [] k :GameLogics.board){
+            for(int i: k){
+                if(i == 0)
+                    nobodyWon = false;
+            }
+        }
+
+        return nobodyWon;
     }
 
     public boolean turnPlayers(int turn, int[] arr) {
@@ -115,21 +141,20 @@ public class GameMap extends JPanel {
 
 
         do {
-            //flag = true;
+
 
             if (DOT_H) {
                 cellX = e.getX() / cellWidth + 1;
                 cellY = e.getY() / cellHeight + 1;
 
                 System.out.println("Чел: \ncellX = " + cellX);
-                System.out.println("cellY = " + cellY);
             } else {
                 cellX = (int) (Math.random() * (fieldSizeX)) + 1;
                 cellY = (int) (Math.random() * (fieldSizeY)) + 1;
 
                 System.out.println("Комп: \ncellX = " + cellX);
-                System.out.println("cellY = " + cellY);
             }
+            System.out.println("cellY = " + cellY);
 
             value = cellX * 10 + cellY;
 
@@ -140,20 +165,15 @@ public class GameMap extends JPanel {
                 if (DOT_H) {
                     GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, RED);
                     DOT_H = false;
-                    break;
                 } else {
                     GameLogics.boardXO[cellX-1][cellY-1] = new ShapeXO(cellX-1, cellY-1, cellWidth, cellHeight, BLUE);
                     DOT_H = true;
-                    break;
                 }
-
-
+                break;
             } else {
                 if (DOT_H) {
-                    //printGameBoard(board);
                     System.out.println("Ячейка занята! Выберите другую...");
                 }
-                //flag = false;
             }
 
         } while (true);
@@ -179,10 +199,11 @@ public class GameMap extends JPanel {
     public boolean isWin(int[] arr) {
 
         boolean playerWin = false;
-        win = 1;
-        win10 = 1;
-        win11 = 1;
-        win9 = 1;
+        int win = 1;
+        int win10 = 1;
+        int win11 = 1;
+        int win9 = 1;
+
 
         for (int i = arr.length - 1; i > 0; i--) {
             win = 1;
@@ -274,7 +295,13 @@ public class GameMap extends JPanel {
         this.fieldSizeX = fieldSizeX;
         this.fieldSizeY = fieldSizeY;
         this.winLength = winLength;
-        //field = new int[fieldSizeY][fieldSizeX];
+
+        GameLogics.board = new int[fieldSizeX][fieldSizeY];
+        GameLogics.boardXO = new ShapeXO[fieldSizeX][fieldSizeY];
+
+
+        arrX = new int[sum(fieldSizeX * fieldSizeY)];
+        arrO = new int[sum(fieldSizeX * fieldSizeY)];
 
         repaint();
 
@@ -284,6 +311,7 @@ public class GameMap extends JPanel {
     protected void paintComponent(Graphics g) {
         System.out.println("метод paintComponent");
         super.paintComponent(g);
+
         render(g);
 
     }
@@ -323,12 +351,12 @@ public class GameMap extends JPanel {
         }
     }
 
-    private static int sum(int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
+    private int sum(int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
         int t = 0;
         if (sizeBoard % 2 != 0) {
-            t = (3 * 3 + 1) / 2;
+            t = (fieldSizeX * fieldSizeY + 1) / 2;
         } else {
-            t = 3 * 3 / 2;
+            t = fieldSizeX * fieldSizeY / 2;
         }
         return t;
     }
