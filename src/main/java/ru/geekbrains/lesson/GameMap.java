@@ -11,6 +11,8 @@ public class GameMap extends JPanel {
     private static final int DOT_HUMAN = 1;
     private static final int DOT_AI = 2;
     private static final int DOT_PADDING = 5;
+    private static boolean DOT_H = true;
+
 
     private int stateGameOver;
     private static final int STATE_DRAW = 0;
@@ -34,11 +36,22 @@ public class GameMap extends JPanel {
     private int cellHeight;
     GameLogics gameLogics;
 
+    ShapeXO shapeXO;
+
+    static int [] arrX;  // массив ходов первого игрока
+    static int [] arrO;  // массив ходов второго игрока
+
     GameMap() {
         System.out.println("конструктор GameMap");
         setBackground(Color.WHITE);
         gameLogics = new GameLogics();
         GameLogics.board = new int[3][3];
+        GameLogics.boardXO = new ShapeXO[3][3];
+
+
+
+        arrX = new int[sum(9)];
+        arrO = new int[sum(9)];
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -55,15 +68,41 @@ public class GameMap extends JPanel {
 
     private void update(MouseEvent e) {
         System.out.println("метод update");
+        int cellX;
+        int cellY;
 
-        int cellX = e.getX() / cellWidth;
-        int cellY = e.getY() / cellHeight;
+        if(DOT_H) {
+            cellX = e.getX() / cellWidth;
+            cellY = e.getY() / cellHeight;
+        } else {
+//            cellX = 1;  // сюда вписать рандом от Пк
+//            cellY = 1;  // сюда вписать рандом от ПК
 
-        System.out.println(cellX);
-        System.out.println(cellY);
+            cellX = e.getX() / cellWidth;
+            cellY = e.getY() / cellHeight;
+        }
+
+//        System.out.println(cellX);
+//        System.out.println(cellY);
+
+        int value = (cellX+1) * 10 + (cellY+1);
 
         if (GameLogics.board[cellY][cellX] == 0) {
-            GameLogics.board[cellY][cellX] = (cellX+1) * 10 + (cellY+1);
+            GameLogics.board[cellY][cellX] = value;
+            if(DOT_H) {
+                //arrX[0] = value;
+
+
+                //shapeXO = new ShapeXO(cellX,cellY,cellWidth,cellHeight);
+                GameLogics.boardXO[cellY][cellX] = new ShapeXO(cellX,cellY,cellWidth,cellHeight);
+
+
+                System.out.println("объект в текущей ячейке" + GameLogics.boardXO[cellY][cellX]);
+
+            } else {
+                arrO[0] = value;
+
+            }
         }
 
         for (int i = 0; i < gameLogics.board.length; i++) {
@@ -72,6 +111,12 @@ public class GameMap extends JPanel {
             }
             System.out.println();
         }
+
+
+        repaint();
+
+
+
 
     }
 
@@ -100,53 +145,6 @@ public class GameMap extends JPanel {
         g.setColor(Color.BLACK);
 
         drawGameBoard(g);
-
-//        if (!initializedMap) {
-//            return;
-//        }
-//        int width = getWidth();
-//        int height = getHeight();
-//        cellWidth = width / fieldSizeX;
-//        cellHeight = height / fieldSizeY;
-//        g.setColor(Color.BLACK);
-//        for (int i = 0; i < fieldSizeY; i++) {
-//            int y = i * cellHeight;
-//            g.drawLine(0, y, width, y);
-//        }
-//
-//        for (int i = 0; i < fieldSizeX; i++) {
-//            int x = i * cellWidth;
-//            g.drawLine(x, 0, x, height);
-//        }
-//
-//        for (int y = 0; y < fieldSizeY; y++) {
-//            for (int x = 0; x < fieldSizeX; x++) {
-//                if (isEmptyCell(x, y)) {
-//                    continue;
-//                }
-//                if (field[y][x] == DOT_HUMAN) {
-//                    g.setColor(new Color(1, 1, 255));
-//                    g.fillOval(x * cellWidth + DOT_PADDING,
-//                            y * cellHeight + DOT_PADDING,
-//                            cellWidth - DOT_PADDING * 2,
-//                            cellHeight - DOT_PADDING * 2);
-//                } else if (field[y][x] == DOT_AI) {
-//                    g.setColor(Color.RED);
-//                    g.fillOval(x * cellWidth + DOT_PADDING,
-//                            y * cellHeight + DOT_PADDING,
-//                            cellWidth - DOT_PADDING * 2,
-//                            cellHeight - DOT_PADDING * 2);
-//                } else {
-//                    throw new RuntimeException(String.format("Can't repaint cell field[%d][%d]: %d", y, x, field[y][x]));
-//                }
-//            }
-//        }
-//        if (isGameOver) {
-//            showMessageGameOver(g);
-//        }
-
-
-
     }
 
     private void drawGameBoard(Graphics g) {
@@ -169,32 +167,65 @@ public class GameMap extends JPanel {
             g.drawLine(x, 0, x, height);
         }
 
-        for (int y = 0; y < fieldSizeY; y++) {
-            for (int x = 0; x < fieldSizeX; x++) {
-                if (isEmptyCell(x, y)) {
-                    continue;
-                }
-                if (field[y][x] == DOT_HUMAN) {
-                    g.setColor(new Color(1, 1, 255));
-                    g.fillOval(x * cellWidth + DOT_PADDING,
-                            y * cellHeight + DOT_PADDING,
-                            cellWidth - DOT_PADDING * 2,
-                            cellHeight - DOT_PADDING * 2);
-                } else if (field[y][x] == DOT_AI) {
-                    g.setColor(Color.RED);
-                    g.fillOval(x * cellWidth + DOT_PADDING,
-                            y * cellHeight + DOT_PADDING,
-                            cellWidth - DOT_PADDING * 2,
-                            cellHeight - DOT_PADDING * 2);
-                } else {
-                    throw new RuntimeException(String.format("Can't repaint cell field[%d][%d]: %d", y, x, field[y][x]));
-                }
+        for (int i = 0; i < GameLogics.boardXO.length; i++) {
+            for (int j = 0; j < GameLogics.boardXO.length; j++) {
+                //System.out.println("объект" + shapeXO);
+               if(GameLogics.boardXO[i][j] != null)
+                    GameLogics.boardXO[i][j].paint(g);
+                //new ShapeXO(1,1,cellWidth,cellHeight).paint(g);
             }
         }
+
+//                int y;
+//                int x;
+//
+//
+//                if (DOT_H) {
+//
+//                    for (int i = 0; i < arrX.length; i++) {
+//                        if(arrX[i] != 0){
+//                            x = arrX[i]/10 - 1;
+//                            y = arrX[i]%10 - 1;
+//                            g.setColor(new Color(1, 1, 255));
+//                            g.fillOval(x * cellWidth + DOT_PADDING,
+//                                    y * cellHeight + DOT_PADDING,
+//                                    cellWidth - DOT_PADDING * 2,
+//                                    cellHeight - DOT_PADDING * 2);
+//                            DOT_H = false;
+//                        }
+//                    }
+//                } else if (DOT_H == false) {
+//                    for (int i = 0; i < arrO.length; i++) {
+//                        if(arrO[i] != 0){
+//                            x = arrO[i]/10-1;
+//                            y = arrO[i]%10-1;
+//                            g.setColor(Color.RED);
+//                            g.fillOval(x * cellWidth + DOT_PADDING,
+//                                    y * cellHeight + DOT_PADDING,
+//                                    cellWidth - DOT_PADDING * 2,
+//                                    cellHeight - DOT_PADDING * 2);
+//                            DOT_H = true;
+//                        }
+//                    }
+//                } else {
+//                   // throw new RuntimeException(String.format("Can't repaint cell field[%d][%d]: %d", y, x, field[y][x]));
+//                }
+
+
     }
 
     public boolean isEmptyCell(int x, int y) {
-        System.out.println("метод isEmptyCell");
+        //System.out.println("метод isEmptyCell");
         return field[y][x] == DOT_EMPTY;
+    }
+
+    private static int sum (int sizeBoard) {  // высчитывает максимально возможное кол-во ходов
+        int t = 0;
+        if (sizeBoard%2 != 0){
+            t = (sizeBoard*sizeBoard+1)/2;
+        } else {
+            t = sizeBoard*sizeBoard/2;
+        }
+        return t;
     }
 }
