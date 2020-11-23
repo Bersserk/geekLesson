@@ -16,8 +16,6 @@ public class ControllerSettingWindow {
         this.fieldSizeY = fieldSizeY;
         this.winLength = winLength;
 
-
-
         System.out.println("конструктор ControllerSettingWindow...");
         System.out.println("gameMode: " + this.gameMode);
         System.out.println("fieldSizeX: " + this.fieldSizeX);

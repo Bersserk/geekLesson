@@ -65,12 +65,14 @@ public class ViewSetting extends JFrame {
 
 //                System.out.println(e.getID());
                 //isGameModeSetup();
-                controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
+                //controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
                 System.out.println("ViewSetting.actionPerformed...");
                 System.out.println("gameMode: " + gameMode);
                 System.out.println("fieldSizeX: " + fieldSizeX);
                 System.out.println("fieldSizeY: " + fieldSizeY);
                 System.out.println("winLength: " + winLength);
+
+                btnPlayGameClick();
 
 
                 dispose();
@@ -95,10 +97,7 @@ public class ViewSetting extends JFrame {
 
     }
 
-    private void isGameModeSetup() {
-        if(humVSHum.isSelected())
-            gameMode = false;
-    }
+
 
     private void addFieldMapControl() {
         JLabel lbFieldSize = new JLabel(FIELD_SIZE_PREFIX + MIN_FIELD_SIZE);
@@ -129,10 +128,25 @@ public class ViewSetting extends JFrame {
         add(lbWinLength);
         add(slideWinLen);
 
+
+    }
+
+    private void btnPlayGameClick() {
+
+
+        if(humVSHum.isSelected()){
+            gameMode = false;
+        } else {
+            throw new RuntimeException("Unexpected game mode!");
+        }
+
         fieldSizeX = slideFieldSize.getValue();
         fieldSizeY = slideFieldSize.getValue();
 
         winLength = slideWinLen.getValue();
+
+        controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
+
     }
 
 }
