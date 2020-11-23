@@ -1,5 +1,6 @@
-package ru.geekbrains.lesson;
+package ru.geekbrains.lesson.view;
 
+import ru.geekbrains.lesson.controller.ControllerSettingWindow;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -8,12 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by Aleksandr Gladkov [Anticisco]
- * Date of creation: 09.11.2020
- */
-
-public class Setting extends JFrame {
+public class ViewSetting extends JFrame {
 
     private static final int WINDOW_WIDTH = 350;
     private static final int WINDOW_HEIGHT = 270;
@@ -24,18 +20,30 @@ public class Setting extends JFrame {
     private static final String FIELD_SIZE_PREFIX = "Field size is: ";
     private static final String WIN_LENGTH_PREFIX = "Win length is: ";
 
-    private MainWindow mainWindow;
+    private boolean gameMode = true;
+    ///private int fieldSize;
+    private int fieldSizeX;
+    private int fieldSizeY;
+    private int winLength;
+
+
+    //private ViewMainWindow viewMainWindow;
 
     private JRadioButton humVSAI;
     private JRadioButton humVSHum;
     private JSlider slideWinLen;
     private JSlider slideFieldSize;
 
+    JButton btnPlay;
+    ControllerSettingWindow controllerSettingWindow;
 
-    Setting(MainWindow mainWindow) {
-        this.mainWindow = mainWindow;
+
+    public ViewSetting(ViewMainWindow viewMainWindow) {
+        System.out.println("Конструктор ViewSetting...");
+
+        //this.viewMainWindow = viewMainWindow;
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        Rectangle gameWindowBounds = mainWindow.getBounds();
+        Rectangle gameWindowBounds = viewMainWindow.getBounds();
         int posX = (int) gameWindowBounds.getCenterX() - WINDOW_WIDTH / 2;
         int posY = (int) gameWindowBounds.getCenterY() - WINDOW_HEIGHT / 2;
         setLocation(posX, posY);
@@ -46,30 +54,50 @@ public class Setting extends JFrame {
         addGameModeSetup();
         addFieldMapControl();
 
-        JButton btnPlay = new JButton("Play new game!!");
+
+
+        btnPlay = new JButton("Play new game!!");
+        add(btnPlay);
+
         btnPlay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                btnPlayGameClick();
+//                System.out.println(e.getID());
+                //isGameModeSetup();
+                controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
+                System.out.println("ViewSetting.actionPerformed...");
+                System.out.println("gameMode: " + gameMode);
+                System.out.println("fieldSizeX: " + fieldSizeX);
+                System.out.println("fieldSizeY: " + fieldSizeY);
+                System.out.println("winLength: " + winLength);
+
+
+                dispose();
+
 
             }
         });
 
-        add(btnPlay);
         setVisible(false);
-
     }
 
     private void addGameModeSetup() {
         add(new JLabel("Choose game mode:"));
         humVSAI = new JRadioButton("Human vs. AI", true);
         humVSHum = new JRadioButton("Human vs. Human");
-        ButtonGroup gameMode = new ButtonGroup();
-        gameMode.add(humVSAI);
-        gameMode.add(humVSHum);
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(humVSAI);
+        buttonGroup.add(humVSHum);
         add(humVSAI);
         add(humVSHum);
+
+
+    }
+
+    private void isGameModeSetup() {
+        if(humVSHum.isSelected())
+            gameMode = false;
     }
 
     private void addFieldMapControl() {
@@ -100,23 +128,11 @@ public class Setting extends JFrame {
         add(new JLabel("Choose win length"));
         add(lbWinLength);
         add(slideWinLen);
+
+        fieldSizeX = slideFieldSize.getValue();
+        fieldSizeY = slideFieldSize.getValue();
+
+        winLength = slideWinLen.getValue();
     }
 
-    private void btnPlayGameClick() {
-        int gameMode;
-
-        if (humVSAI.isSelected()) {
-            gameMode = GameMap.MODE_HVA;
-        } else if (humVSHum.isSelected()) {
-            gameMode = GameMap.MODE_HVH;
-        } else {
-            throw new RuntimeException("Unexpected game mode!");
-        }
-
-        int fieldSize = slideFieldSize.getValue();
-        int winLength = slideWinLen.getValue();
-
-        mainWindow.startNewGame(gameMode, fieldSize, fieldSize, winLength);
-
-    }
 }
