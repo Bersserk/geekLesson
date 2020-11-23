@@ -1,6 +1,6 @@
 package ru.geekbrains.lesson.view;
 
-import ru.geekbrains.lesson.controller.ControllerSettingWindow;
+import ru.geekbrains.lesson.controller.SettingController;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ViewSetting extends JFrame {
+public class SettingView extends JFrame {
 
     private final int WINDOW_WIDTH = 350;
     private final int WINDOW_HEIGHT = 270;
@@ -20,21 +20,16 @@ public class ViewSetting extends JFrame {
     private final String FIELD_SIZE_PREFIX = "Field size is: ";
     private final String WIN_LENGTH_PREFIX = "Win length is: ";
 
-    private boolean gameMode = true;
-    private int fieldSizeX;
-    private int fieldSizeY;
-    private int winLength;
-
     private JRadioButton humVSAI;
     private JRadioButton humVSHum;
     private JSlider slideWinLen;
     private JSlider slideFieldSize;
 
     JButton btnPlay;
-    ControllerSettingWindow controllerSettingWindow;
+    SettingController settingController;
 
-    public ViewSetting(ViewMainWindow viewMainWindow) {
-        System.out.println("Конструктор ViewSetting...");
+    public SettingView(ViewMainWindow viewMainWindow) {
+        System.out.println("Конструктор SettingView...");
 
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         Rectangle gameWindowBounds = viewMainWindow.getBounds();
@@ -104,17 +99,13 @@ public class ViewSetting extends JFrame {
 
     private void btnPlayGameClick() {
 
-        if (humVSHum.isSelected()) {
-            gameMode = false;
-        } else {
-            throw new RuntimeException("Unexpected game mode!");
-        }
+        boolean gameMode = (humVSHum.isSelected()) ? false: true;
 
-        fieldSizeX = slideFieldSize.getValue();
-        fieldSizeY = slideFieldSize.getValue();
-        winLength = slideWinLen.getValue();
+        int fieldSizeX = slideFieldSize.getValue();
+        int fieldSizeY = slideFieldSize.getValue();
+        int winLength = slideWinLen.getValue();
 
-        controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
+        settingController = new SettingController(gameMode, fieldSizeX, fieldSizeY, winLength);
     }
 
 }

@@ -14,10 +14,10 @@ public class ViewMainWindow extends JFrame {
     private static final int WINDOW_POSX = 650;   // задаем начальную координату по Х, расположения нашего окна в окне Windows
     private static final int WINDOW_POSY = 270;   // задаем начальную координату по Y, расположения нашего окна в окне Windows
 
-    private ViewSetting viewSetting;
+    private SettingView settingView;
     private GameMap gameMap;
     //private ControllerMainWindow controllerMainWindow;
-    //private ControllerSettingWindow controllerSettingWindow;
+    //private SettingController settingController;
 
     public ViewMainWindow() {  // конструктор класса
         System.out.println("конструктор ViewMainWindow...");
@@ -26,16 +26,16 @@ public class ViewMainWindow extends JFrame {
         setLocation(WINDOW_POSX, WINDOW_POSY);   // вызываем метод задающий начальное расположение нашего окна, по константным координатам.
         setTitle("Игра: Крестики-нолики");   // метод, задающий название нашего окна
 
-        //controllerSettingWindow = new ControllerSettingWindow();
+        //settingController = new SettingController();
 
-        viewSetting = new ViewSetting(this);
+        settingView = new SettingView(this);
         //gameMap = new GameMap();
 
         JButton btnStart = new JButton("Create new game");
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewSetting.setVisible(true);
+                settingView.setVisible(true);
             }
         });
 

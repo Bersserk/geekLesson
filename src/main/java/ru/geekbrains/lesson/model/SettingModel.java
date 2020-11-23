@@ -1,6 +1,6 @@
 package ru.geekbrains.lesson.model;
 
-public class Model {
+public class SettingModel {
 
     private static final int WINDOW_WIDTH = 350;
     private static final int WINDOW_HEIGHT = 270;
