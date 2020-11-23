@@ -1,13 +1,11 @@
 package ru.geekbrains.lesson.controller;
 
-import ru.geekbrains.lesson.view.ViewMainWindow;
-
 public class SettingController {
 
-    boolean gameMode;
-    int fieldSizeX;
-    int fieldSizeY;
-    int winLength;
+    private boolean gameMode;
+    private int fieldSizeX;
+    private int fieldSizeY;
+    private int winLength;
 
     public SettingController(boolean gameMode, int fieldSizeX, int fieldSizeY, int winLength) {
 
