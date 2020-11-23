@@ -11,23 +11,19 @@ import java.awt.event.ActionListener;
 
 public class ViewSetting extends JFrame {
 
-    private static final int WINDOW_WIDTH = 350;
-    private static final int WINDOW_HEIGHT = 270;
+    private final int WINDOW_WIDTH = 350;
+    private final int WINDOW_HEIGHT = 270;
 
-    private static final int MIN_WIN_LENGTH = 3;
-    private static final int MIN_FIELD_SIZE = 3;
-    private static final int MAX_FIELD_SIZE = 10;
-    private static final String FIELD_SIZE_PREFIX = "Field size is: ";
-    private static final String WIN_LENGTH_PREFIX = "Win length is: ";
+    private final int MIN_WIN_LENGTH = 3;
+    private final int MIN_FIELD_SIZE = 3;
+    private final int MAX_FIELD_SIZE = 10;
+    private final String FIELD_SIZE_PREFIX = "Field size is: ";
+    private final String WIN_LENGTH_PREFIX = "Win length is: ";
 
     private boolean gameMode = true;
-    ///private int fieldSize;
     private int fieldSizeX;
     private int fieldSizeY;
     private int winLength;
-
-
-    //private ViewMainWindow viewMainWindow;
 
     private JRadioButton humVSAI;
     private JRadioButton humVSHum;
@@ -37,11 +33,9 @@ public class ViewSetting extends JFrame {
     JButton btnPlay;
     ControllerSettingWindow controllerSettingWindow;
 
-
     public ViewSetting(ViewMainWindow viewMainWindow) {
         System.out.println("Конструктор ViewSetting...");
 
-        //this.viewMainWindow = viewMainWindow;
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         Rectangle gameWindowBounds = viewMainWindow.getBounds();
         int posX = (int) gameWindowBounds.getCenterX() - WINDOW_WIDTH / 2;
@@ -54,33 +48,16 @@ public class ViewSetting extends JFrame {
         addGameModeSetup();
         addFieldMapControl();
 
-
-
         btnPlay = new JButton("Play new game!!");
         add(btnPlay);
 
         btnPlay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-//                System.out.println(e.getID());
-                //isGameModeSetup();
-                //controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
-                System.out.println("ViewSetting.actionPerformed...");
-                System.out.println("gameMode: " + gameMode);
-                System.out.println("fieldSizeX: " + fieldSizeX);
-                System.out.println("fieldSizeY: " + fieldSizeY);
-                System.out.println("winLength: " + winLength);
-
                 btnPlayGameClick();
-
-
                 dispose();
-
-
             }
         });
-
         setVisible(false);
     }
 
@@ -93,11 +70,7 @@ public class ViewSetting extends JFrame {
         buttonGroup.add(humVSHum);
         add(humVSAI);
         add(humVSHum);
-
-
     }
-
-
 
     private void addFieldMapControl() {
         JLabel lbFieldSize = new JLabel(FIELD_SIZE_PREFIX + MIN_FIELD_SIZE);
@@ -127,14 +100,11 @@ public class ViewSetting extends JFrame {
         add(new JLabel("Choose win length"));
         add(lbWinLength);
         add(slideWinLen);
-
-
     }
 
     private void btnPlayGameClick() {
 
-
-        if(humVSHum.isSelected()){
+        if (humVSHum.isSelected()) {
             gameMode = false;
         } else {
             throw new RuntimeException("Unexpected game mode!");
@@ -142,11 +112,9 @@ public class ViewSetting extends JFrame {
 
         fieldSizeX = slideFieldSize.getValue();
         fieldSizeY = slideFieldSize.getValue();
-
         winLength = slideWinLen.getValue();
 
         controllerSettingWindow = new ControllerSettingWindow(gameMode, fieldSizeX, fieldSizeY, winLength);
-
     }
 
 }

@@ -27,31 +27,15 @@ public class ControllerSettingWindow {
         return gameMode;
     }
 
-    public void setGameMode(boolean gameMode) {
-        this.gameMode = gameMode;
-    }
-
     public int getFieldSizeX() {
         return fieldSizeX;
-    }
-
-    public void setFieldSizeX(int fieldSizeX) {
-        this.fieldSizeX = fieldSizeX;
     }
 
     public int getFieldSizeY() {
         return fieldSizeY;
     }
 
-    public void setFieldSizeY(int fieldSizeY) {
-        this.fieldSizeY = fieldSizeY;
-    }
-
     public int getWinLength() {
         return winLength;
-    }
-
-    public void setWinLength(int winLength) {
-        this.winLength = winLength;
     }
 }
