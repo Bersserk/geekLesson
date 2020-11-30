@@ -28,7 +28,7 @@ public class SettingView extends JFrame {
     JButton btnPlay;
     SettingController settingController;
 
-    public SettingView(ViewMainWindow viewMainWindow) {
+    public SettingView(SettingController settingController, ViewMainWindow viewMainWindow) {
         System.out.println("Конструктор SettingView...");
 
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -99,13 +99,13 @@ public class SettingView extends JFrame {
 
     private void btnPlayGameClick() {
 
-        boolean gameMode = (humVSHum.isSelected()) ? false: true;
+        boolean chose = (humVSHum.isSelected()) ? false: true;
 
-        int fieldSizeX = slideFieldSize.getValue();
-        int fieldSizeY = slideFieldSize.getValue();
-        int winLength = slideWinLen.getValue();
+        settingController.setGameMode(chose);
+        settingController.setFieldSizeX(slideFieldSize.getValue());
+        settingController.setFieldSizeY(slideFieldSize.getValue());
+        settingController.setWinLength(slideWinLen.getValue());
 
-        settingController = new SettingController(gameMode, fieldSizeX, fieldSizeY, winLength);
     }
 
 }

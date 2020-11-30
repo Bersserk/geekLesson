@@ -9,9 +9,7 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        GameModel gameModel = new GameModel();
-        GameController gameController = new GameController(gameModel);
-        GameView gameView = new GameView(gameController);
+
 
         SwingUtilities.invokeLater(() -> {
             ViewMainWindow viewMainWindow = new ViewMainWindow();

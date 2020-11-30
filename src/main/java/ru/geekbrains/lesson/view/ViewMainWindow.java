@@ -1,5 +1,7 @@
 package ru.geekbrains.lesson.view;
 
+import ru.geekbrains.lesson.controller.SettingController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +15,9 @@ public class ViewMainWindow extends JFrame {
     private static final int WINDOW_POSY = 270;   // задаем начальную координату по Y, расположения нашего окна в окне Windows
 
     private SettingView settingView;
+    private GameView gameView;
+    private SettingController settingController;
+
 
     public ViewMainWindow() {  // конструктор класса
         System.out.println("конструктор ViewMainWindow...");
@@ -21,13 +26,13 @@ public class ViewMainWindow extends JFrame {
         setLocation(WINDOW_POSX, WINDOW_POSY);   // вызываем метод задающий начальное расположение нашего окна, по константным координатам.
         setTitle("Игра: Крестики-нолики");   // метод, задающий название нашего окна
 
-        settingView = new SettingView(this);
 
-        JButton btnStart = new JButton("Create new game");
+
+            JButton btnStart = new JButton("Create new game");
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                settingView.setVisible(true);
+                settingController.getSettingView().setVisible(true);
             }
         });
 
@@ -43,8 +48,13 @@ public class ViewMainWindow extends JFrame {
         panelBottom.setLayout(new GridLayout(1, 2));
         panelBottom.add(btnStart);
         panelBottom.add(btnExitGame);
-
         add(panelBottom, BorderLayout.SOUTH);
+
+        settingController = new SettingController(this);
+        //settingView = new SettingView(this);
+        // gameView = new SettingController().getGameView();
+
+        add(settingController.getGameView());
 
         setResizable(false);
         setVisible(true);
