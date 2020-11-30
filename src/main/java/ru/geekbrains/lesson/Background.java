@@ -3,7 +3,7 @@ package ru.geekbrains.lesson;
 import javax.swing.*;
 import java.awt.*;
 
-final class Background extends JPanel implements Runnable{
+final class Background extends JPanel implements Runnable {
 
     private int time;
     private GameCanvas gameCanvas;
@@ -14,7 +14,7 @@ final class Background extends JPanel implements Runnable{
         this.gameCanvas = gameCanvas;
     }
 
-    public void run(){
+    public void run() {
 
         while (true) {
             try {
