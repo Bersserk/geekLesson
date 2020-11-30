@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class GameCanvas extends JPanel {
 
-    long lastFrameTime;
-    MainCircles controller;
-    Thread canvasBackground;
+    private long lastFrameTime;
+    private MainCircles controller;
+    private Thread canvasBackground;
 
     GameCanvas(MainCircles controller) {
         lastFrameTime = System.nanoTime();

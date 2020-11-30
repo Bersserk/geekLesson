@@ -3,10 +3,10 @@ package ru.geekbrains.lesson;
 import javax.swing.*;
 import java.awt.*;
 
-public class Background extends JPanel implements Runnable{
+final class Background extends JPanel implements Runnable{
 
-    int time;
-    GameCanvas gameCanvas;
+    private int time;
+    private GameCanvas gameCanvas;
 
     public Background(GameCanvas gameCanvas, int time) {
         super();
