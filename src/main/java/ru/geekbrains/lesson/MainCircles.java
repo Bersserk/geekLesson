@@ -2,6 +2,9 @@ package ru.geekbrains.lesson;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 public class MainCircles extends JFrame {
 
@@ -11,6 +14,7 @@ public class MainCircles extends JFrame {
     private static final int WINDOW_HEIGHT = 600;
 
     Sprite[] sprites = new Sprite[10];
+    Sprite[] newSprites;
 
     public static void main(String[] args) {
         new MainCircles();
@@ -21,9 +25,29 @@ public class MainCircles extends JFrame {
         setBounds(POS_X, POS_Y, WINDOW_WIDTH, WINDOW_HEIGHT);
         setTitle("Circles");
         GameCanvas canvas = new GameCanvas(this);
+
+        canvas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                if (e.getButton() == MouseEvent.BUTTON1)
+                    changeCountCircles(1);
+                else if (e.getButton() == MouseEvent.BUTTON3 && sprites.length > 1)
+                    changeCountCircles(-1);
+            }
+        });
+
         initApplication();
         add(canvas);
         setVisible(true);
+    }
+
+    private void changeCountCircles(int i) {
+        newSprites = Arrays.copyOf(sprites, sprites.length + i);
+        if (i > 0)
+            newSprites[sprites.length] = new Ball();
+        sprites = newSprites;
+        repaint();
     }
 
     private void initApplication() {
