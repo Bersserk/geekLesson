@@ -7,10 +7,14 @@ public class GameCanvas extends JPanel {
 
     long lastFrameTime;
     MainCircles controller;
+    Thread canvasBackground;
 
     GameCanvas(MainCircles controller) {
         lastFrameTime = System.nanoTime();
         this.controller = controller;
+
+        canvasBackground = new Thread(new Background(this, 3000));
+        canvasBackground.start();
     }
 
     @Override
@@ -25,6 +29,14 @@ public class GameCanvas extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
+
+        //setBackground(new Background(3000).start());
+
+        //setBackground(Color.RED);
+
         repaint();
     }
 

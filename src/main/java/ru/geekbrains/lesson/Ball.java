@@ -5,11 +5,6 @@ import java.util.Random;
 
 public class Ball extends Sprite {
     Random rnd = new Random();
-//    private final Color color = new Color (
-//            (int)(Math.random() * 255),
-//            (int)(Math.random() * 255),
-//            (int)(Math.random() * 255)
-//    );
 
     private final Color color;
     private float vX;
