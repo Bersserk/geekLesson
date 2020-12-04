@@ -2,33 +2,52 @@ package ru.geekbrains.lesson;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
-public class PhoneBook {
+public class PhoneBook implements checkPhoneNumber {
 
-    Map <String, Person> phoneBook;
-
+    Map<String, Person> phoneBook;
     Person person;
 
     public PhoneBook() {
-
         phoneBook = new HashMap<>();
     }
 
     public void addNewContact(String surname, String email, String phoneNumber) {
-        Person person = new Person(surname, email, phoneNumber);
+
+        person = new Person(surname, email, phoneNumber);
         phoneBook.put(surname, person);
     }
 
     public void addAnotherEmail(String surname, String emails) {
-        // проверяем, есть ли уже контакт с такой фамилией, если нет, создаем
-        // если контакт есть, добавляем email в его список
-        phoneBook.get(surname).setAnotherEmail(emails);
+        if (phoneBook.containsKey(surname))
+            phoneBook.get(surname).setAnotherEmail(emails);
+        else {
+            System.out.print("Такого контакта не существует, желаете создать? (1-да): ");
+            if (new Scanner(System.in).nextInt() == 1) {
+                while (true) {
+                    System.out.println("Введите номер телефона (только числа от 5 до 10 знаков включительно ): ");
+                    String newPhoneNumber = new Scanner(System.in).nextLine();
+
+                    if (checkPhoneNumber(newPhoneNumber)) {
+                        addNewContact(surname, emails, newPhoneNumber);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void addAnotherPhoneNumber(String surname, String phoneNumber) {
-        // проверяем, есть ли уже контакт с такой фамилией, если нет, создаем
-        // если контакт есть, добавляем phoneNumber в его список
-        phoneBook.get(surname).setAnotherPhoneNumber(phoneNumber);
+
+        if (phoneBook.containsKey(surname))
+            phoneBook.get(surname).setAnotherPhoneNumber(phoneNumber);
+        else {
+            System.out.print("Такого контакта не существует, желаете создать? (1-да): ");
+            if (new Scanner(System.in).nextInt() == 1) {
+                addNewContact(surname, "", phoneNumber);
+            }
+        }
     }
 
     public void getEmails(String surname) {

@@ -1,8 +1,12 @@
 package ru.geekbrains.lesson;
 
-public class Main {
+public class Main implements checkPhoneNumber {
 
-    private static PhoneBook phoneBook = new PhoneBook();
+    PhoneBook phoneBook;
+
+    public Main(PhoneBook phoneBook) {
+        this.phoneBook = phoneBook;
+    }
 
     public static void main(String[] args) {
         // решения первого задания
@@ -13,19 +17,50 @@ public class Main {
 
         // решения второго задания
 
-        phoneBook.addNewContact ("Jack", "jack@g.com", "066_123_45_66");
-        phoneBook.addAnotherEmail("Jack", "jack@mail.ru");
-        phoneBook.addAnotherPhoneNumber("Jack", "073_123_45_66");
+        Main main = new Main(new PhoneBook());
 
-        phoneBook.addNewContact("Fill", "fill@gmail.com", "056_151_32_85");
-        phoneBook.addAnotherEmail("Fill", "fill@mail.ru");
-        phoneBook.addAnotherPhoneNumber("Fill", "099_999_99_99");
+        main.newContact("Jack", "jack@g.com", "99995658191");
+        main.addEmail("Jack", "jack@mail.ru");
+        main.addPhoneNumber( "Jack", "07312345066");
 
-        phoneBook.getEmails ("Jack");
-        phoneBook.getPhoneNumbers ("Jack");
-        phoneBook.getEmails ("Fill");
-        phoneBook.getPhoneNumbers ("Fill");
+        main.newContact( "Fill", "fill@gmail.com", "0561513285");
+        main.addEmail("Fill", "fill@mail.ru");
+        main.addPhoneNumber("Fill", "0999999999");
+
+        main.searchEmail("Jack");
+        main.searchPhoneNumber("Jack");
+        main.searchEmail("Fill");
+        main.searchPhoneNumber("Fill");
+
+        main.addEmail("Rocky", "rocky@mail.ru");
+        main.searchEmail("Rocky");
+        main.searchPhoneNumber("Rocky");
 
 
     }
+
+
+    public void newContact(String surname, String email, String phoneNumber) {
+        if (checkPhoneNumber(phoneNumber))
+            phoneBook.addNewContact(surname, email, phoneNumber);
+    }
+
+    public void addPhoneNumber(String surname, String phoneNumber) {
+        if (checkPhoneNumber(phoneNumber))
+            phoneBook.addAnotherPhoneNumber(surname, phoneNumber);
+    }
+
+    public void addEmail(String surname, String email) {
+        phoneBook.addAnotherEmail(surname, email);
+    }
+
+    public void searchPhoneNumber(String surname) {
+        phoneBook.getPhoneNumbers(surname);
+    }
+
+    public void searchEmail(String surname) {
+        phoneBook.getEmails(surname);
+    }
+
+
 }
