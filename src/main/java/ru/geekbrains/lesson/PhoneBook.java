@@ -6,20 +6,20 @@ import java.util.Scanner;
 
 public class PhoneBook implements checkPhoneNumber {
 
-    Map<String, Person> phoneBook;
-    Person person;
+    private Map<String, Person> phoneBook;
+    private Person person;
 
     public PhoneBook() {
         phoneBook = new HashMap<>();
     }
 
-    public void addNewContact(String surname, String email, String phoneNumber) {
+    void addNewContact(String surname, String email, String phoneNumber) {
 
         person = new Person(surname, email, phoneNumber);
         phoneBook.put(surname, person);
     }
 
-    public void addAnotherEmail(String surname, String emails) {
+    void addAnotherEmail(String surname, String emails) {
         if (phoneBook.containsKey(surname))
             phoneBook.get(surname).setAnotherEmail(emails);
         else {
@@ -38,7 +38,7 @@ public class PhoneBook implements checkPhoneNumber {
         }
     }
 
-    public void addAnotherPhoneNumber(String surname, String phoneNumber) {
+    void addAnotherPhoneNumber(String surname, String phoneNumber) {
 
         if (phoneBook.containsKey(surname))
             phoneBook.get(surname).setAnotherPhoneNumber(phoneNumber);
@@ -50,13 +50,13 @@ public class PhoneBook implements checkPhoneNumber {
         }
     }
 
-    public void getEmails(String surname) {
+    void getEmails(String surname) {
         // если контакта с таким именем еще нет, вывести уведомление
         person = phoneBook.get(surname);
         System.out.println("emails контакта " + surname + ": " + person.getEmails());
     }
 
-    public void getPhoneNumbers(String surname) {
+    void getPhoneNumbers(String surname) {
         // если контакта с таким именем еще нет, вывести уведомление
         person = phoneBook.get(surname);
         System.out.println("номера контакта " + surname + ": " + person.getPhoneNumbers());

@@ -8,26 +8,26 @@ public class Person {
     private ArrayList emails = new ArrayList();
     private ArrayList phoneNumbers = new ArrayList();
 
-    public Person(String surname, String email, String phoneNumber) {
+    Person(String surname, String email, String phoneNumber) {
         this.surname = surname;
         this.emails.add(email);
         this.phoneNumbers.add(phoneNumber);
     }
 
 
-    public ArrayList getEmails() {
+    ArrayList getEmails() {
         return emails;
     }
 
-    public ArrayList getPhoneNumbers() {
+    ArrayList getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setAnotherEmail(String anotherEmail) {
+    void setAnotherEmail(String anotherEmail) {
         emails.add(anotherEmail);
     }
 
-    public void setAnotherPhoneNumber(String anotherPhoneNumber) {
+    void setAnotherPhoneNumber(String anotherPhoneNumber) {
         phoneNumbers.add(anotherPhoneNumber);
     }
 }

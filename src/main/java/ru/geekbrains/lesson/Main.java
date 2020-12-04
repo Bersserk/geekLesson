@@ -21,9 +21,9 @@ public class Main implements checkPhoneNumber {
 
         main.newContact("Jack", "jack@g.com", "99995658191");
         main.addEmail("Jack", "jack@mail.ru");
-        main.addPhoneNumber( "Jack", "07312345066");
+        main.addPhoneNumber("Jack", "07312345066");
 
-        main.newContact( "Fill", "fill@gmail.com", "0561513285");
+        main.newContact("Fill", "fill@gmail.com", "0561513285");
         main.addEmail("Fill", "fill@mail.ru");
         main.addPhoneNumber("Fill", "0999999999");
 
@@ -54,10 +54,12 @@ public class Main implements checkPhoneNumber {
         phoneBook.addAnotherEmail(surname, email);
     }
 
+    // Отдельный метод для поиска номера телефона по фамилии (ввели фамилию, получили ArrayList телефонов)
     public void searchPhoneNumber(String surname) {
         phoneBook.getPhoneNumbers(surname);
     }
 
+    // Отдельный метод для поиска e-mail по фамилии
     public void searchEmail(String surname) {
         phoneBook.getEmails(surname);
     }
