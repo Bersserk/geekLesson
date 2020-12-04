@@ -19,22 +19,25 @@ public class Main implements checkPhoneNumber {
 
         Main main = new Main(new PhoneBook());
 
-        main.newContact("Jack", "jack@g.com", "99995658191");
-        main.addEmail("Jack", "jack@mail.ru");
-        main.addPhoneNumber("Jack", "07312345066");
+        main.newContact("Иванов", "jack@g.com", "0111111111");
+        main.newContact("Иванов", "jack2@g.com", "0222222222");
+        main.newContact("Иванов", "jack3@g.com", "0333333333");
 
-        main.newContact("Fill", "fill@gmail.com", "0561513285");
-        main.addEmail("Fill", "fill@mail.ru");
-        main.addPhoneNumber("Fill", "0999999999");
+        main.searchPhoneNumber("Иванов");
 
-        main.searchEmail("Jack");
-        main.searchPhoneNumber("Jack");
-        main.searchEmail("Fill");
-        main.searchPhoneNumber("Fill");
+//        main.addEmail("Jack", "jack@mail.ru");
+//        main.addPhoneNumber("Jack", "07312345066");
 
-        main.addEmail("Rocky", "rocky@mail.ru");
-        main.searchEmail("Rocky");
-        main.searchPhoneNumber("Rocky");
+//        main.addEmail("Fill", "fill@mail.ru");
+//        main.addPhoneNumber("Fill", "0999999999");
+//
+//        main.searchEmail("Jack");
+//        main.searchEmail("Fill");
+//        main.searchPhoneNumber("Fill");
+//
+//        main.addEmail("Rocky", "rocky@mail.ru");
+//        main.searchEmail("Rocky");
+//        main.searchPhoneNumber("Rocky");
 
 
     }
@@ -45,24 +48,24 @@ public class Main implements checkPhoneNumber {
             phoneBook.addNewContact(surname, email, phoneNumber);
     }
 
-    public void addPhoneNumber(String surname, String phoneNumber) {
-        if (checkPhoneNumber(phoneNumber))
-            phoneBook.addAnotherPhoneNumber(surname, phoneNumber);
-    }
-
-    public void addEmail(String surname, String email) {
-        phoneBook.addAnotherEmail(surname, email);
-    }
-
+//    public void addPhoneNumber(String surname, String phoneNumber) {
+//        if (checkPhoneNumber(phoneNumber))
+//            phoneBook.addAnotherPhoneNumber(surname, phoneNumber);
+//    }
+//
+//    public void addEmail(String surname, String email) {
+//        phoneBook.addAnotherEmail(surname, email);
+//    }
+//
     // Отдельный метод для поиска номера телефона по фамилии (ввели фамилию, получили ArrayList телефонов)
     public void searchPhoneNumber(String surname) {
         phoneBook.getPhoneNumbers(surname);
     }
-
-    // Отдельный метод для поиска e-mail по фамилии
-    public void searchEmail(String surname) {
-        phoneBook.getEmails(surname);
-    }
+//
+//    // Отдельный метод для поиска e-mail по фамилии
+//    public void searchEmail(String surname) {
+//        phoneBook.getEmails(surname);
+//    }
 
 
 }
