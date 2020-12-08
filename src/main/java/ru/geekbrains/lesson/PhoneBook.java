@@ -4,71 +4,59 @@ import java.util.*;
 
 public class PhoneBook implements checkPhoneNumber {
 
-    private Map <String, Map > phoneBook;
     private Person person;
-    private Map <Integer, Person> arrayPersons;
+    private List<Person> listPersons;
+    private Map<String, List> phoneBook;
 
     public PhoneBook() {
         phoneBook = new HashMap<>();
-        arrayPersons = new HashMap<>();
     }
 
     void addNewContact(String surname, String email, String phoneNumber) {
 
-        int id = arrayPersons.size() + 1;
-        arrayPersons.put(id , new Person(id, surname, email, phoneNumber));
-        phoneBook.put(surname, arrayPersons);
+        if (phoneBook.containsKey(surname)) {
+
+            int count = phoneBook.get(surname).size();
+            phoneBook.get(surname).add(new Person(++count, email, phoneNumber));
+
+        } else {
+            int id = 1;
+            listPersons = new LinkedList<>();
+            listPersons.add(new Person(id, email, phoneNumber));
+            phoneBook.put(surname, listPersons);
+        }
     }
 
-//    void addAnotherEmail(String surname, String emails) {
-//        if (phoneBook.containsKey(surname))
-//            phoneBook.get(surname).setAnotherEmail(emails);
-//        else {
-//            System.out.print("Такого контакта не существует, желаете создать? (1-да): ");
-//            if (new Scanner(System.in).nextInt() == 1) {
-//                while (true) {
-//                    System.out.println("Введите номер телефона (только числа от 5 до 10 знаков включительно ): ");
-//                    String newPhoneNumber = new Scanner(System.in).nextLine();
-//
-//                    if (checkPhoneNumber(newPhoneNumber)) {
-//                        addNewContact(surname, emails, newPhoneNumber);
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    void addAnotherPhoneNumber(String surname, String phoneNumber) {
-//
-//        if (phoneBook.containsKey(surname))
-//            phoneBook.get(surname).setAnotherPhoneNumber(phoneNumber);
-//        else {
-//            System.out.print("Такого контакта не существует, желаете создать? (1-да): ");
-//            if (new Scanner(System.in).nextInt() == 1) {
-//                addNewContact(surname, "", phoneNumber);
-//            }
-//        }
-//    }
-//
-//    void getEmails(String surname) {
-//        // если контакта с таким именем еще нет, вывести уведомление
-//        person = phoneBook.get(surname);
-//        System.out.println("emails контакта " + surname + ": " + person.getEmails());
-//    }
-//
+    void getEmails(String surname) {
+        if (phoneBook.containsKey(surname)) {
+
+            Iterator<Person> iterator = readList(surname, "Список контактов и их email's по фамилии ");
+
+            while (iterator.hasNext()) {
+                person = iterator.next();
+                System.out.println(person.getId() + ". " + person.getEmails());
+            }
+        } else
+            System.out.println("Контактов по фамилии " + surname + " не существует");
+    }
+
     void getPhoneNumbers(String surname) {
-        // если контакта с таким именем еще нет, вывести уведомление
+        if (phoneBook.containsKey(surname)) {
 
-        //person = (Person) phoneBook.get(surname).get(2);
+            Iterator<Person> iterator = readList(surname, "Список контактов и их телефоны по фамилии ");
 
-        //arrayPersons = phoneBook.get(surname);
+            while (iterator.hasNext()) {
+                person = iterator.next();
+                System.out.println(person.getId() + ". " + person.getPhoneNumbers());
+            }
+        } else
+            System.out.println("Контактов по фамилии " + surname + " не существует");
+    }
 
-        System.out.println("результат поиска по фамилии " + surname + ":");
-        for (int i = 0; i < arrayPersons.size(); i++) {
-            person = (Person) phoneBook.get(surname).get(i+1);
-            System.out.println(person.getId() + "." + person.getPhoneNumbers() + "; " + person.getEmails());
-        }
-
+    private Iterator<Person> readList(String surname, String consoleText) {
+        listPersons = phoneBook.get(surname);
+        Iterator<Person> iterator = listPersons.iterator();
+        System.out.println(consoleText + surname);
+        return iterator;
     }
 }
