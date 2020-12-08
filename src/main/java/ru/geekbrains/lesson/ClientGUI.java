@@ -2,8 +2,9 @@ package ru.geekbrains.lesson;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ClientGUI extends JFrame implements ActionListener,
         Thread.UncaughtExceptionHandler {
@@ -28,6 +29,7 @@ public class ClientGUI extends JFrame implements ActionListener,
 
     private final JList<String> userList = new JList<>();
 
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -46,10 +48,12 @@ public class ClientGUI extends JFrame implements ActionListener,
         JScrollPane scrollLog = new JScrollPane(log);
         JScrollPane scrollUsers = new JScrollPane(userList);
         String[] users = {"user1", "user2", "user3", "user4", "user5", "user6",
-                            "user_with_an_exceptionally_long_nickname"};
+                "user_with_an_exceptionally_long_nickname"};
         userList.setListData(users);
         scrollUsers.setPreferredSize(new Dimension(100, 0));
         cbAlwaysOnTop.addActionListener(this);
+
+        btnSend.addActionListener(this);
 
         panelTop.add(tfIPAddress);
         panelTop.add(tfPort);
@@ -67,16 +71,35 @@ public class ClientGUI extends JFrame implements ActionListener,
         add(panelBottom, BorderLayout.SOUTH);
 
         setVisible(true);
+
+        tfMessage.requestFocusInWindow();
+
+        tfMessage.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == 10) {
+                    writeLogFile(tfMessage.getText());
+                    tfMessage.setText("");
+                }
+            }
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
+
         if (src == cbAlwaysOnTop) {
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
+        } else if (src == btnSend) {
+            writeLogFile(tfMessage.getText());
+            tfMessage.setText("");
         } else {
             throw new RuntimeException("Undefined source: " + src);
         }
+
+        tfMessage.requestFocusInWindow();
     }
 
     @Override
@@ -88,5 +111,15 @@ public class ClientGUI extends JFrame implements ActionListener,
                 e.getMessage(), ste[0]);
         JOptionPane.showMessageDialog(this, msg, "Exception", JOptionPane.ERROR_MESSAGE);
         System.exit(1);
+    }
+
+    private void writeLogFile(String sendText) {
+        try (FileWriter writer = new FileWriter("log.txt", true)) {
+            writer.write(sendText);
+            writer.append('\n');
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }
