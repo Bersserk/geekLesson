@@ -80,7 +80,6 @@ public class ClientGUI extends JFrame implements ActionListener,
                 super.keyPressed(e);
                 if (e.getKeyCode() == 10) {
                     writeLogFile(tfMessage.getText());
-                    tfMessage.setText("");
                 }
             }
         });
@@ -94,7 +93,6 @@ public class ClientGUI extends JFrame implements ActionListener,
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
         } else if (src == btnSend) {
             writeLogFile(tfMessage.getText());
-            tfMessage.setText("");
         } else {
             throw new RuntimeException("Undefined source: " + src);
         }
@@ -121,5 +119,12 @@ public class ClientGUI extends JFrame implements ActionListener,
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+        setTextInLogWindow(sendText);
+    }
+
+    private void setTextInLogWindow (String sendText){
+        log.append(sendText + "\n");
+        tfMessage.setText("");
     }
 }
