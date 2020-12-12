@@ -55,12 +55,9 @@ public class Main {
     }
 
     private static void calculateInThread(float[] tmpArray) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < tmpArray.length; i++) {
-                    tmpArray[i] = (float) (tmpArray[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
-                }
+        new Thread(() -> {
+            for (int i = 0; i < tmpArray.length; i++) {
+                tmpArray[i] = (float) (tmpArray[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
             }
         }).start();
         Thread.interrupted();
