@@ -1,6 +1,6 @@
 package ru.geekbrains.lesson;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -8,6 +8,7 @@ public class Main {
 
         String [] str = {"a", "b", "c"};
 
+        // task 1
         System.out.println("Замена элементов массива без дженериков");
         System.out.println("первый элемент в массиве, до изменений = " + str[0]);
         replacementElements(str, 0, 2);
@@ -18,11 +19,14 @@ public class Main {
         replacementElementsViaGenerics(str, 0, 2);
         System.out.println("первый элемент в массиве, после изменений = " + str[0]);
 
+        // task 2
+        System.out.println("массив до преобразования: " + str.getClass().getSimpleName());
+        ArrayList arrayList = arrayToArrayList(str);
+        System.out.println("массив после преобразования: " + arrayList.getClass().getSimpleName());
 
     }
 
     public static Object [] replacementElements (Object [] arrays, int elementOne, int elementTwo){
-
         Object tmp = arrays[elementOne];
         arrays[elementOne] = arrays[elementTwo];
         arrays[elementTwo] = tmp;
@@ -30,10 +34,15 @@ public class Main {
     }
 
     public static <T> T[] replacementElementsViaGenerics (T [] arrays, int elementOne, int elementTwo){
-
         T tmp = arrays[elementOne];
         arrays[elementOne] = arrays[elementTwo];
         arrays[elementTwo] = tmp;
         return arrays;
+    }
+
+    public static ArrayList arrayToArrayList (Object [] array){
+        ArrayList arrayList = new ArrayList();
+        arrayList.toArray(array);
+        return arrayList;
     }
 }
