@@ -15,7 +15,7 @@ public class Pack {
         System.out.println("Вес коробки boxTwo = " + boxTwo.getWeight());
 
         // Сравниваем коробки по весу
-        System.out.println(boxOne.compare(boxTwo));
+        System.out.println(compare(boxOne, boxTwo));
 
         //  меняем содержимое коробок местами
         pourAllFruits(boxOne, boxTwo);
@@ -23,11 +23,27 @@ public class Pack {
         System.out.println("Вес коробки boxTwo = " + boxTwo.getWeight());
     }
 
-    private static void pourAllFruits (Box boxFrom, Box boxTo){
-        Box tmpBox = new Box(null, 0);
+    private static String compare(Box<Apple> boxOne, Box<Orange> boxTwo) {
+        if (Math.abs(boxOne.getWeight() - boxTwo.getWeight()) < 0.0001)
+            return "Коробки по весу равны";
+        else
+            return "Коробки по весу не равны";
+    }
 
-        boxFrom.pourAllFruits(tmpBox);
-        boxTo.pourAllFruits(boxFrom);
-        tmpBox.pourAllFruits(boxTo);
+    private static void pourAllFruits (Box boxFrom, Box boxTo){
+        Box <Fruit> tmpBox = new Box<>(null, 0);
+
+        fromPourTo (boxFrom, tmpBox);
+        fromPourTo(boxTo, boxFrom);
+        fromPourTo(tmpBox, boxTo);
+    }
+
+
+    private static Box fromPourTo(Box boxFrom, Box boxTo) {
+        boxTo.getArrayList().addAll(0, boxFrom.getArrayList());
+        boxTo.setBoxWeight(boxFrom.getWeight());
+        boxFrom.getArrayList().clear();
+        boxFrom.setBoxWeight(0.0f);
+        return boxTo;
     }
 }
